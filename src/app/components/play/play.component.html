@@ -18,9 +18,9 @@
             [cardData]='cardAData'
             (selected)="checkIfSuccess($event)">
         </app-card>
-        <div fxLayout="column" fxLayoutAlign="center center">
+        <div  class="spinner">
             <mat-progress-spinner
-                class="timer"
+                [diameter]="diameterSpinner"
                 [color]="'warn'"
                 [mode]="'determinate'"
                 [value]="spinnerValue">

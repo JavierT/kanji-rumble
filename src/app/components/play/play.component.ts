@@ -21,6 +21,7 @@ export class PlayComponent implements OnInit, AfterViewInit {
 
   timerValue = 30;
   spinnerValue = 100;
+  diameterSpinner = 100;
   timerStep = this.spinnerValue / this.timerValue;
   cardAData: Icarta[] = [];
   cardBData: Icarta[] = [];
@@ -36,6 +37,9 @@ export class PlayComponent implements OnInit, AfterViewInit {
         this.all_tiles = data;
         this.createRandomCards(this.level);
       });
+    if (window.innerWidth < 600) {
+      this.diameterSpinner = 40;
+    }
   }
 
   createRandomCards(img_in_card: number) {
@@ -47,13 +51,14 @@ export class PlayComponent implements OnInit, AfterViewInit {
     // Here I have all the tiles in all_tiles in a MAP sorted by
     // folder_name: array of image names
     const keys: string[] = Array.from(this.all_tiles.keys());
+    
     const total_folders = this.all_tiles.size;
     const pick_random = (img_in_card * 2) - 1;
     // Here I'll store the picked ones
     const picked: Icarta[] = [];
     // Until double of number of tiles - 1, I pick
     for (let i = 0; i < pick_random; i++) {
-      let random_index = Math.floor(Math.random() * (total_folders - 1));
+      let random_index = Math.floor(Math.random() * total_folders);
       // adding just a security control
       if (random_index < 0 || random_index > (keys.length - 1)) {
         random_index = 0;
@@ -78,7 +83,7 @@ export class PlayComponent implements OnInit, AfterViewInit {
     // in the cardB array. But there is a mistake because if I do 
     // that then it's too easy to find as it is the same. I think I
     // should get a same one in another folder. 
-    let random_index = Math.floor(Math.random() * (img_in_card - 1));
+    let random_index = Math.floor(Math.random() * img_in_card);
     this.solutionCard = cardADataTmp[random_index];
     const new_folder = this.getFolderDifferentTo(keys, cardADataTmp[random_index].folder);
     cardBDataTmp.push({
@@ -96,7 +101,7 @@ export class PlayComponent implements OnInit, AfterViewInit {
 
   checkIfExist(picked: Icarta[], folder: string, img: string) {
     for (const tile of picked) {
-      if (tile.img === img && tile.folder === folder) {
+      if (tile.img === img) {
         return true;
       }
     }
@@ -108,7 +113,7 @@ export class PlayComponent implements OnInit, AfterViewInit {
     // this folder
     const imgArray = this.all_tiles.get(key) as string[];
     const totalImgs = imgArray.length;
-    const random_index = Math.floor(Math.random() * (totalImgs - 1));
+    const random_index = Math.floor(Math.random() * totalImgs);
     // security control
     if (random_index < 0 || random_index >= totalImgs) {
       return imgArray[0];
@@ -201,7 +206,7 @@ export class PlayComponent implements OnInit, AfterViewInit {
       this._snackBar.open("Has perdido", 'Ok', {
         duration: 4000,
       });
-      this.router.navigateByUrl('/home');
+      this.router.navigateByUrl('/');
     } else {
       this.createRandomCards(this.level);
       this.resetContdown(this.intial_timer);

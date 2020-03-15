@@ -4,6 +4,12 @@ mat-card-title {
     text-align: center;
 }
 
+.title {
+    @media (max-width: $breakpoint-mobile){
+        display: none;
+    } 
+}
+
 .card {
     display: flex;
     flex-direction: column;

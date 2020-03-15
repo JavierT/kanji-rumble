@@ -26,3 +26,17 @@
     flex-direction: column;
     flex-basis: 40%;
 }
+
+.spinner {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    @media (max-width: $breakpoint-mobile){
+        position: fixed;
+        top: 64px;
+        right: 10px; 
+    }
+}
+    
