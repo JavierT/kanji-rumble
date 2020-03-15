@@ -12,10 +12,12 @@ import { Router } from '@angular/router';
 export class PlayComponent implements OnInit, AfterViewInit {
 
   all_tiles;
-  lifes = [true, true, true];
-  currentLifes = 3;
+  lives = [true, true, true];
+  currentlives = 3;
 
   level = 4;
+  correct = 0;
+  intial_timer = 30;
 
   timerValue = 30;
   spinnerValue = 100;
@@ -59,11 +61,16 @@ export class PlayComponent implements OnInit, AfterViewInit {
       // Here I have a random folder
       const picked_key = keys[random_index];
       const img = this.getRandomImgInFolder(picked_key)
-      picked.push({
-        "folder": picked_key,
-        "img" : img,
-        "selected": false,
-      })   
+      if (!this.checkIfExist(picked, picked_key, img))
+      {
+        picked.push({
+          "folder": picked_key,
+          "img" : img,
+          "selected": false,
+        });
+      } else {
+        i--;
+      }
     }
     // I have already N -1
     this.cardAData = picked.splice(0, img_in_card);
@@ -74,14 +81,23 @@ export class PlayComponent implements OnInit, AfterViewInit {
     // should get a same one in another folder. 
     let random_index = Math.floor(Math.random() * (img_in_card-1));
     this.solutionCard = this.cardAData[random_index];
-
+    const new_folder = this.getFolderDifferentTo(keys, this.cardAData[random_index].folder);
     this.cardBData.push({
-        "folder": this.cardAData[random_index].folder,
+        "folder": new_folder,
         "img" : this.cardAData[random_index].img,
         "selected": false,
     });
     // console.log('cardA: ', this.cardAData)
     // console.log('cardB: ', this.cardBData)
+  }
+
+  checkIfExist(picked: Icarta[], folder: string, img: string) {
+    for (const tile of picked) {
+       if (tile.img === img && tile.folder === folder) {
+         return true;
+       }
+    }
+    return false;
   }
 
   getRandomImgInFolder(key: string): string {
@@ -96,6 +112,14 @@ export class PlayComponent implements OnInit, AfterViewInit {
     } else {
       return imgArray[random_index];
     }
+  }
+
+  getFolderDifferentTo(keys, folderToAvoid) {
+    let random_index = Math.floor(Math.random() * (keys.length-1));
+    if (keys[random_index] === folderToAvoid) {
+      random_index = random_index + 1 % keys.length;
+    }
+    return keys[random_index];
   }
 
   ngAfterViewInit(): void {
@@ -168,35 +192,41 @@ export class PlayComponent implements OnInit, AfterViewInit {
 
   private loseALife() {
     this.clearSelected()
-    this.currentLifes -= 1;
-    this.lifes[this.currentLifes] = false;
-    if (this.currentLifes == 0) {
+    this.currentlives -= 1;
+    this.lives[this.currentlives] = false;
+    if (this.currentlives == 0) {
       this._snackBar.open("Has perdido", 'Ok', {
         duration: 4000,
       });
       this.router.navigateByUrl('/home');
+    } else {
+      this.createRandomCards(this.level);
+      this.resetContdown(this.intial_timer);
     }
   }
 
   private nextLevel() {
-    let seconds = 30;
-    if (this.level === 10) {
-      this.level = 10;
-      if (seconds === 10) {
-        seconds = 10;
+    this.intial_timer = 30;
+    this.correct += 1;
+    if (this.correct === 3) {
+      this.correct = 0;
+      if (this.level === 10) {
+        this.level = 10;
+        if (this.intial_timer === 10) {
+          this.intial_timer = 10;
+        } else {
+          this.intial_timer -= 5;
+        }
       } else {
-        seconds -= 5;
+        this.level += 1
       }
-    } else {
-      this.level += 1
     }
     this.createRandomCards(this.level);
-    this.resetContdown(seconds);
+    this.resetContdown(this.intial_timer);
   }
 
   private compareTiles(tile1: Icarta, tile2: Icarta) {
-    return tile1.img === tile2.img
-      && tile1.folder === tile2.folder;
+    return tile1.img === tile2.img;
   }
 
   private clearSelected() {

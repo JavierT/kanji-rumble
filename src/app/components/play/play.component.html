@@ -1,8 +1,8 @@
 <div fxLayout="column">
-    <div fxLayoutAlign="start center" class="lifes">
+    <div fxLayoutAlign="start center" class="lives">
         <span>Vidas:</span>
         <div fxLayout="row">
-            <div *ngFor="let life of lifes">
+            <div *ngFor="let life of lives">
                 <ng-container *ngIf="life; else emptylife">
                     <mat-icon class="icon">favorite</mat-icon>
                 </ng-container>
