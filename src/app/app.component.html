@@ -1,0 +1,73 @@
+<mat-sidenav-container class="all-wrap">
+
+  <mat-sidenav #sidenav position="end">
+    <mat-nav-list>
+      <a mat-list-item [routerLink]="'/'">
+        <mat-icon class="icon-sidenav">home</mat-icon>
+        <span class="label">Accueil</span>
+      </a>
+      <a mat-list-item [routerLink]="'/play'">
+        <mat-icon class="icon-sidenav">play_arrow</mat-icon>
+        <span class="label">Play</span>
+      </a>
+      <a mat-list-item [routerLink]="'/contact'">
+        <mat-icon class="icon-sidenav">contact_support</mat-icon>
+        <span class="label">Nous contacter</span>
+      </a>
+      <mat-list-item (click)="sidenav.toggle()">
+        <mat-icon class="icon-sidenav">close</mat-icon>
+        <span class="label">Fermer</span>
+      </mat-list-item>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="page-wrap">
+
+    <mat-toolbar color="primary">
+      <mat-toolbar-row fxLayoutAlign="space-between" fxLayoutGap="20px">
+        <div class="logo" fxFlexAlign="center" fxLayout="row">
+          <img class="main-img" src="/assets/img/logo.jpeg" alt="">
+          <h1 class="main-text">Kanji Rumble</h1>
+        </div>
+        <!-- Hiding the menu if resolution is lower than middle -->
+        <div fxShow="true" fxHide.lt-md="true" class="menu" fxFlexAlign="center">
+          <a mat-button [routerLink]="'/'">
+            <mat-icon class="icon">home</mat-icon>
+            <span class="label">Accueil</span>
+          </a>
+          <a mat-button [routerLink]="'/play'">
+            <mat-icon class="icon">play_arrow</mat-icon>
+            <span class="label">Play</span>
+          </a>
+          <a mat-button [routerLink]="'/contact'">
+            <mat-icon class="icon">contact_support</mat-icon>
+            <span class="label">Nous contacter</span>
+          </a>
+        </div>
+        <div fxFlexAlign="center" fxHide.gt-sm="true">
+          <button mat-icon-button>
+            <mat-icon (click)="sidenav.toggle()">menu</mat-icon>
+          </button>
+        </div>
+      </mat-toolbar-row>
+    </mat-toolbar>
+
+    <main class="content main-content">
+      <router-outlet></router-outlet>
+    </main>
+
+    <footer class="footer">
+
+      <div class="footer-items"  fxLayout="row">
+        <div>
+          <img class="footer-cert" src="/assets/img/certifications.png" alt="">
+        </div>
+        <div fxFlex class="copyrigth">&copy;2020 JT & JM Corp</div>
+      </div> 
+      
+    </footer>
+
+
+  </mat-sidenav-content>
+
+</mat-sidenav-container>

@@ -1,0 +1,38 @@
+
+<section class="login-container">
+  <form #authForm='ngForm' (ngSubmit)='onSubmit(authForm)' class="main-form">
+    <mat-form-field>
+      <input mat-input type="email"
+        placeholder="Votre
+        email"
+        matInput
+        id="email"
+        ngModel
+        name="email"
+        required
+        email
+      />
+    </mat-form-field>
+
+    <mat-form-field>
+      <input mat-input type="password"
+        matInput
+        placeholder="Votre mot de pass"
+        id="password"
+        ngModel
+        name='password'
+        required
+        minlength="6"/>
+    </mat-form-field>
+
+    <div class="btn-input">
+      <button mat-raised-button 
+        type='submit' 
+        [disabled]='!authForm.valid'
+        color="primary">
+        Login
+    </button>
+    </div>
+
+  </form>
+</section>

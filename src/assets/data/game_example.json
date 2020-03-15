@@ -1,0 +1,52 @@
+{
+	"card1": [{
+			"folder": "2",
+			"img": "28"
+		},
+		{
+			"folder": "3",
+			"img": "24"
+		},
+		{
+			"folder": "5",
+			"img": "55"
+		},
+		{
+			"folder": "1",
+			"img": "35"
+		},
+		{
+			"folder": "5",
+			"img": "57"
+		}
+	],
+	"card2": [{
+			"folder": "5",
+			"img": "3"
+		},
+		{
+			"folder": "2",
+			"img": "55"
+		},
+		{
+			"folder": "3",
+			"img": "54"
+		},
+		{
+			"folder": "1",
+			"img": "14"
+		},
+		{
+			"folder": "2",
+			"img": "48"
+		}
+	],
+	"solution1": {
+		"folder": "5",
+		"img": "55"
+	},
+	"solution2": {
+		"folder": "2",
+		"img": "55"
+	}
+}

@@ -1,0 +1,134 @@
+@import "../variables.scss";
+@import "~@angular/material/theming";
+.footer {
+  background-color: mat-color($primaryPalette);;
+}
+
+
+.all-wrap {
+  min-height: 100vh; // same height as browser window height
+}
+ 
+.page-wrap {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; // same height as browser window height
+}
+ 
+.content {
+  flex: 1; // child will set to an equal size inside the container
+}
+
+.main-content {
+ // if we want a background image
+}
+ 
+ 
+/*
+ * Make the component injected by <router-outlet> full height:
+ */
+ 
+main {
+ 
+  display: flex;
+  flex-direction: column;
+ 
+  // Select all direct descendants only of the <main> element
+  // that are not <router-outlet> elements:
+  > *:not(router-outlet) {
+ 
+    flex: 1; // child will set to an equal size inside the container
+    display: block;
+ 
+  }
+ 
+}
+
+  mat-sidenav {
+    width: 250px;
+  }
+
+  mat-toolbar-row, mat-toolbar-single-row {
+    padding: 0 6px;
+  } 
+
+  a {
+    text-decoration: none;
+    color: white;
+  }
+  
+  a:hover,
+  a:active {
+    color: lightgray;
+  }
+  
+  .navigation-items {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+  }
+
+  .logo {
+    flex-grow: 1;
+    //max-width: 35%;
+
+    .main-text {
+      margin-left: 1vw;
+      display: inline-block;
+      text-align: left;
+      margin: .4em 0 0.2em 0;
+      color: white;
+      letter-spacing: 4px;
+      font-variant: small-caps;
+      white-space: normal;
+    }
+
+    .main-img {
+      height: 40px;
+      margin-right: 10px;
+      display: flex;
+      align-self: center;
+    }
+  }
+
+  .menu {
+    //flex-grow: 2;
+    align-content: flex-end;
+  }
+  
+  .icon-sidenav {
+    display: inline-block;
+    height: 25px;
+    margin: 0 auto;
+    padding-right: 5px;
+    text-align: center;
+    vertical-align: middle;
+    width: 15%;
+  }
+
+  .footer-items {
+    flex-direction: row;
+    display: flex;
+    align-items: center;
+    text-align: center;
+  }
+
+  .footer-cert {
+    
+    vertical-align: middle;
+    //max-height: 50px;
+    width: 100px;
+    padding: 1em;
+  }
+
+  .admin {
+    vertical-align: bottom;
+    color: white;
+  }
+
+  .copyrigth {
+    text-align: right;
+    padding-right: 1em;
+    color: white;
+  }

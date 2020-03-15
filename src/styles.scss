@@ -1,0 +1,38 @@
+/* You can add global styles to this file, and also import other style files */
+//@import "custom-theme.scss";
+@import '@angular/material/prebuilt-themes/purple-green.css';
+//@include angular-material-theme($my-theme);
+
+body {
+    margin: 0;
+
+  }
+
+mat-card {
+    margin: 1em;
+    opacity: 0.85;
+}
+ 
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active  {
+    -webkit-box-shadow: 0 0 0 30px #7aaffb inset !important;
+}
+
+.icon {
+    display: inline-block;
+    height: 30px;
+    margin: 0 auto;
+    padding-right: 5px;
+    text-align: center;
+    vertical-align: middle;
+    width: 15%;
+  }
+
+  .label {
+    display: inline-block;
+    line-height: 30px;
+    margin: 0;
+    width: 85%;
+  }
