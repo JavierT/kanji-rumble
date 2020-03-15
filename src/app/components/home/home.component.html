@@ -1,20 +1,29 @@
 <div fxLayout="column">
-    <div class="description">
-        <p>Entre las dos cartas que aparecen en pantallas hay una imagen con el mismo significado.</p>
-        <p class="emphasis">¡A ver cómo de rápido eres capaz de encontrarla!</p>
+    <div *ngIf="solved; else firstTime" fxFlex fxLayout="column">
+        <div class="description">
+            <p class="emphasis">¡BIEN HECHO!</p>
+            <p>Ahora puedes registrarte o entrar con tu cuenta para poder acceder a mas niveles y batir todos los
+                récords</p>
+        </div>
+        <div fxFlex fxLayoutAlign="center center">
+            <button mat-raised-button [routerLink]="'/play'">Quiero jugar</button>
+        </div>
     </div>
-    <div class="two-cards">
-            <mat-card  class="card-example">
+    <ng-template #firstTime>
+        <div class="description">
+            <p>Entre las dos cartas que aparecen en pantallas hay una imagen con el mismo significado.</p>
+            <p class="emphasis">¡A ver cómo de rápido eres capaz de encontrarla!</p>
+        </div>
+        <div class="two-cards">
+            <mat-card class="cards">
                 <mat-card-title>
                     Carta 1
                 </mat-card-title>
                 <mat-card-content>
                     <mat-grid-list cols="3" gutterSize="20px">
-                        <mat-grid-tile *ngFor="let tile of carta1ejemplo; let i = index" 
-                        class="selectable-tile"
-                        (click)="selectTile(carta1ejemplo, i)">
-                            <img [src]="getImgSrc(tile)" alt="" 
-                            [ngClass]="{
+                        <mat-grid-tile *ngFor="let tile of carta1ejemplo; let i = index" class="selectable-tile"
+                            (click)="selectTile(carta1ejemplo, i)">
+                            <img [src]="getImgSrc(tile)" alt="" [ngClass]="{
                                 'selectable-tile-img':true,
                                 'active-tile': tile.selected, 
                                 'solution-by-help': showSolution
@@ -23,17 +32,15 @@
                     </mat-grid-list>
                 </mat-card-content>
             </mat-card>
-            <mat-card class="card-example">
+            <mat-card class="cards">
                 <mat-card-title>
                     Carta 2
                 </mat-card-title>
                 <mat-card-content>
                     <mat-grid-list cols="3" gutterSize="20px">
-                        <mat-grid-tile *ngFor="let tile of carta2ejemplo; let i = index"
-                            class="selectable-tile"
+                        <mat-grid-tile *ngFor="let tile of carta2ejemplo; let i = index" class="selectable-tile"
                             (click)="selectTile(carta2ejemplo, i)">
-                            <img [src]="getImgSrc(tile)" alt="" 
-                            [ngClass]="{
+                            <img [src]="getImgSrc(tile)" alt="" [ngClass]="{
                                 'selectable-tile-img':true,
                                 'active-tile': tile.selected, 
                                 'solution-by-help': showSolution
@@ -43,21 +50,22 @@
                 </mat-card-content>
             </mat-card>
         </div>
-    <div *ngIf="showSolution">
-        <p>La solucion te la va a explicar jorge aqui>>></p>
-    </div>
-    <div fxFlex fxLayoutAlign="space-between center" class="btns-container">
-        <div class="btn-help" (click)="giveSolution()">
-            <button mat-raised-button >
-                <mat-icon class="icon">sentiment_very_dissatisfied</mat-icon>
-                Ayuda
-            </button>
+        <div *ngIf="showSolution">
+            <p>La solucion te la va a explicar jorge aqui>>></p>
         </div>
-        <div  class="btn-solution">
-            <button mat-raised-button (click)="checkSolution()">
-                <mat-icon class="icon">sentiment_very_satisfied</mat-icon>
-                Comprobar
+        <div fxFlex fxLayoutAlign="space-between center" class="btns-container">
+            <div class="btn-help" (click)="giveSolution()">
+                <button mat-raised-button>
+                    <mat-icon class="icon">sentiment_very_dissatisfied</mat-icon>
+                    Ayuda
                 </button>
+            </div>
+            <div class="btn-solution">
+                <button mat-raised-button (click)="checkSolution()">
+                    <mat-icon class="icon">sentiment_very_satisfied</mat-icon>
+                    Comprobar
+                </button>
+            </div>
         </div>
-    </div>
+    </ng-template>
 </div>

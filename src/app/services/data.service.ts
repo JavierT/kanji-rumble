@@ -13,7 +13,7 @@ import { MyError } from 'app/models/my-error';
 
 export class DataService {
   
-    firebaseUrl: string = "https://bedou-ff0d2.firebaseio.com/"
+    firebaseUrl: string = "https://kenji-83f0d.firebaseio.com/"
     private _urlGameExample = 'assets/data/game_example.json';
 
     constructor(private http: HttpClient) {
@@ -24,7 +24,28 @@ export class DataService {
         return this.http.get<any>(this._urlGameExample);
     }
 
+    //<Map<string, Icarta[]>
+    getAllTiles(): Observable<Map<string, string[]>>{
+        return this.http.get<object>(`${this.firebaseUrl}tiles.json`)
+            .pipe(map(responseData => {
+                let a_tiles = new Map();
+                for (const key in responseData) {
+                    if (responseData.hasOwnProperty(key)) {
+                        const element = responseData[key];
+                        a_tiles.set(key, element)
+                    }
+                }
+                console.log(a_tiles)
+                return a_tiles;
 
+                 
+            }),
+            catchError(errorRes => {
+                console.log('error: ', errorRes);
+                throw new MyError(errorRes);
+            })
+        );
+    }
     /************************ NEWS *************************************************/
     // getNews(): Observable<Inews[]>{
     //     return this.http.get<{ [key:string]: Inews}>(`${this.firebaseUrl}news.json`)

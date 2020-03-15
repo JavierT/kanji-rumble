@@ -1,13 +1,24 @@
+@import '../../../variables.scss';
+
 .two-cards {
     display: flex;
     justify-content: space-evenly;
     flex-direction: row;
+
+    @media (max-width: $breakpoint-mobile){
+        flex-direction: column;
+    }
 }
 
 .cards {
     display: flex;
     flex-direction: column;
     flex-basis: 40%;
+
+    @media (max-width: $breakpoint-mobile){
+        display: flex;
+        flex-basis: 100%;
+    }
 }
 
 mat-card-title {
@@ -42,30 +53,8 @@ mat-card-title {
     display: flex;
 }
 
-// .layout-carta {
-//     display:flex;
-//     flex-direction:row;
-//     justify-content:flex-start;
-//     align-items:stretch;
-
-//     .layout-img {
-//        display: flex;
-//         flex:50%;
-
-//         img {
-//             width: 120px;
-//             height: auto;
-//         }
-//     }
-
-// }
-
-.card-example {
-    width: 35%;
-}
-
 .tile-img {
-    width: 120px;
+    width: 90%;
     height: auto;
 }
 
@@ -78,7 +67,7 @@ mat-card-title {
 }
 
 .description {
-    margin-top: 2em;
+    margin: 2em;
     display: flex;
     align-items: center;
     justify-content: center;

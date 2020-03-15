@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "bedou2": {
+    "kanji": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/bedou2",
+            "outputPath": "dist/kanji",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -68,18 +68,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "bedou2:build"
+            "browserTarget": "kanji:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "bedou2:build:production"
+              "browserTarget": "kanji:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "bedou2:build"
+            "browserTarget": "kanji:build"
           }
         },
         "test": {
@@ -116,15 +116,15 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "bedou2:serve"
+            "devServerTarget": "kanji:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "bedou2:serve:production"
+              "devServerTarget": "kanji:serve:production"
             }
           }
         }
       }
     }},
-  "defaultProject": "bedou2"
+  "defaultProject": "kanji"
 }

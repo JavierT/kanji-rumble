@@ -19,6 +19,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { LoginComponent } from './auth/login/login.component';
 import { AuthInterceptorService } from './services/auth-interceptor.service';
 import { PlayComponent } from './components/play/play.component';
+import { CardComponent } from './components/card/card.component';
 
 
 const firebaseConfig = {
@@ -40,6 +41,7 @@ const firebaseConfig = {
     HomeComponent,
     LoginComponent,
     PlayComponent,
+    CardComponent,
   ],
   imports: [
     BrowserModule,

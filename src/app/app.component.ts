@@ -8,7 +8,7 @@ import { Subscription } from 'rxjs'
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit, OnDestroy {
-  title = 'bedou2';
+  title = 'kanji';
   private userSub: Subscription;
   public isAuthenticated = false;
 

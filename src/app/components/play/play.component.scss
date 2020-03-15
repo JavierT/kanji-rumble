@@ -1,0 +1,28 @@
+@import '../../../variables.scss';
+
+.lifes {
+    margin: 1em;
+    span {
+        margin-right: 0.5em;
+    }
+}
+
+.two-cards {
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: row;
+
+    @media (max-width: $breakpoint-mobile){
+        flex-direction: column;
+    }
+}
+
+.timer {
+    font-size: x-large;
+}
+
+.card {
+
+    flex-direction: column;
+    flex-basis: 40%;
+}

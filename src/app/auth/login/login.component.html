@@ -25,7 +25,14 @@
         minlength="6"/>
     </mat-form-field>
 
-    <div class="btn-input">
+    <div class="btns-layout">
+      <button mat-raised-button 
+        type='submit' 
+        color="primary">
+        Register
+    </button>
+
+
       <button mat-raised-button 
         type='submit' 
         [disabled]='!authForm.valid'

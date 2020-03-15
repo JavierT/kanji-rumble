@@ -1,0 +1,38 @@
+<div fxLayout="column">
+    <div fxLayoutAlign="start center" class="lifes">
+        <span>Vidas:</span>
+        <div fxLayout="row">
+            <div *ngFor="let life of lifes">
+                <ng-container *ngIf="life; else emptylife">
+                    <mat-icon class="icon">favorite</mat-icon>
+                </ng-container>
+                <ng-template #emptylife>
+                    <mat-icon class="icon">favorite_border</mat-icon>
+                </ng-template>
+            </div>
+        </div>
+    </div>
+    <div class="two-cards">
+        <app-card class="card"
+            [title]="'Carta A'"
+            [cardData]='cardAData'
+            (selected)="checkIfSuccess($event)">
+        </app-card>
+        <div fxLayout="column" fxLayoutAlign="center center">
+            <mat-progress-spinner
+                class="timer"
+                [color]="'warn'"
+                [mode]="'determinate'"
+                [value]="spinnerValue">
+            </mat-progress-spinner>
+            <p *ngIf="timerValue > 0" class="timer" fxHide.lt-md="true" >
+                {{timerValue}}
+            </p>
+        </div>
+        <app-card class="card"
+            [title]="'Carta B'"
+            [cardData]='cardBData'
+            (selected)="checkIfSuccess($event)">
+        </app-card>
+    </div>
+</div>

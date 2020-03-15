@@ -17,22 +17,23 @@ export class HomeComponent implements OnInit {
   solutionTile2: Icarta;
   askForHelp: number = 0;
   showSolution: boolean = false;
+  solved = false;
 
   constructor(private dataService: DataService, private _snackBar: MatSnackBar) {
-   }
+  }
 
   ngOnInit() {
     this.dataService.getCardExample()
       .subscribe((res) => {
-          
-          for (const carta of res.card1) {
-            this.carta1ejemplo.push(carta as Icarta);
-          }
-          for (const carta of res.card2) {
-            this.carta2ejemplo.push(carta as Icarta);
-          }
-          this.solutionTile1 = res.solution1 as Icarta;
-          this.solutionTile2 = res.solution2 as Icarta;
+
+        for (const carta of res.card1) {
+          this.carta1ejemplo.push(carta as Icarta);
+        }
+        for (const carta of res.card2) {
+          this.carta2ejemplo.push(carta as Icarta);
+        }
+        this.solutionTile1 = res.solution1 as Icarta;
+        this.solutionTile2 = res.solution2 as Icarta;
       })
   }
 
@@ -40,14 +41,14 @@ export class HomeComponent implements OnInit {
     return `/assets/data/${carta.folder}/${carta.img}.jpg`;
   }
 
-  selectTile(where:Icarta[], index: number) {
+  selectTile(where: Icarta[], index: number) {
     for (const tile of where) {
       tile.selected = false;
     }
     where[index].selected = true;
   }
 
-  private getSelected(arrayTiles:Icarta[]): Icarta {
+  private getSelected(arrayTiles: Icarta[]): Icarta {
     for (const tile of arrayTiles) {
       if (tile.selected) {
         return tile;
@@ -68,6 +69,10 @@ export class HomeComponent implements OnInit {
 
       if (firstCardSol && secCardSol) {
         msg = "La solucion es correcta";
+        setTimeout(() => {
+          this.solved = true;
+        }, 2000);
+
       } else {
         msg = "La solucion no es correcta";
       }
@@ -93,10 +98,25 @@ export class HomeComponent implements OnInit {
       }
     }
     this.showSolution = true;
+    setTimeout(() => {
+      this.clearSelected();
+      this._snackBar.open("Ahora es tu turno", 'Ok', {
+        duration: 2000,
+      });
+    }, 15000);
   }
 
   private compareTiles(tile1: Icarta, tile2: Icarta) {
-    return tile1.img === tile2.img 
+    return tile1.img === tile2.img
       && tile1.folder === tile2.folder;
+  }
+
+  private clearSelected() {
+    for (const tile of this.carta1ejemplo) {
+        tile.selected = false;
+    }
+    for (const tile of this.carta2ejemplo) {
+      tile.selected = false;
+  }
   }
 }

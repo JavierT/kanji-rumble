@@ -1,52 +1,52 @@
 {
 	"card1": [{
-			"folder": "2",
+			"folder": "pictures",
 			"img": "28"
 		},
 		{
-			"folder": "3",
+			"folder": "print",
 			"img": "24"
 		},
 		{
-			"folder": "5",
+			"folder": "translation",
 			"img": "55"
 		},
 		{
-			"folder": "1",
+			"folder": "calligraphy",
 			"img": "35"
 		},
 		{
-			"folder": "5",
+			"folder": "translation",
 			"img": "57"
 		}
 	],
 	"card2": [{
-			"folder": "5",
+			"folder": "translation",
 			"img": "3"
 		},
 		{
-			"folder": "2",
+			"folder": "pictures",
 			"img": "55"
 		},
 		{
-			"folder": "3",
+			"folder": "print",
 			"img": "54"
 		},
 		{
-			"folder": "1",
+			"folder": "calligraphy",
 			"img": "14"
 		},
 		{
-			"folder": "2",
+			"folder": "pictures",
 			"img": "48"
 		}
 	],
 	"solution1": {
-		"folder": "5",
+		"folder": "calligraphy",
 		"img": "55"
 	},
 	"solution2": {
-		"folder": "2",
+		"folder": "pictures",
 		"img": "55"
 	}
 }

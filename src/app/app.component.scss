@@ -1,7 +1,8 @@
 @import "../variables.scss";
 @import "~@angular/material/theming";
 .footer {
-  background-color: mat-color($primaryPalette);;
+  background-color: mat-color($primaryPalette);
+  min-height: 45px;
 }
 
 
