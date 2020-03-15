@@ -53,19 +53,18 @@ export class PlayComponent implements OnInit, AfterViewInit {
     const picked: Icarta[] = [];
     // Until double of number of tiles - 1, I pick
     for (let i = 0; i < pick_random; i++) {
-      let random_index = Math.floor(Math.random() * (total_folders-1));
+      let random_index = Math.floor(Math.random() * (total_folders - 1));
       // adding just a security control
-      if (random_index < 0 || random_index > (keys.length -1)) {
+      if (random_index < 0 || random_index > (keys.length - 1)) {
         random_index = 0;
       };
       // Here I have a random folder
       const picked_key = keys[random_index];
       const img = this.getRandomImgInFolder(picked_key)
-      if (!this.checkIfExist(picked, picked_key, img))
-      {
+      if (!this.checkIfExist(picked, picked_key, img)) {
         picked.push({
           "folder": picked_key,
-          "img" : img,
+          "img": img,
           "selected": false,
         });
       } else {
@@ -73,29 +72,33 @@ export class PlayComponent implements OnInit, AfterViewInit {
       }
     }
     // I have already N -1
-    this.cardAData = picked.splice(0, img_in_card);
-    this.cardBData = picked.slice(0, picked.length);
+    const cardADataTmp = picked.splice(0, img_in_card);
+    const cardBDataTmp = picked.slice(0, picked.length);
     // Then I select one of the already selected ones to put it
     // in the cardB array. But there is a mistake because if I do 
     // that then it's too easy to find as it is the same. I think I
     // should get a same one in another folder. 
-    let random_index = Math.floor(Math.random() * (img_in_card-1));
-    this.solutionCard = this.cardAData[random_index];
-    const new_folder = this.getFolderDifferentTo(keys, this.cardAData[random_index].folder);
-    this.cardBData.push({
-        "folder": new_folder,
-        "img" : this.cardAData[random_index].img,
-        "selected": false,
+    let random_index = Math.floor(Math.random() * (img_in_card - 1));
+    this.solutionCard = cardADataTmp[random_index];
+    const new_folder = this.getFolderDifferentTo(keys, cardADataTmp[random_index].folder);
+    cardBDataTmp.push({
+      "folder": new_folder,
+      "img": cardADataTmp[random_index].img,
+      "selected": false,
     });
+    // console.log('cardA: ', cardADataTmp)
+    // console.log('cardB: ', cardBDataTmp)
+    this.cardAData = this.getRandomArray(cardADataTmp, cardADataTmp.length);
+    this.cardBData = this.getRandomArray(cardBDataTmp, cardBDataTmp.length);
     // console.log('cardA: ', this.cardAData)
     // console.log('cardB: ', this.cardBData)
   }
 
   checkIfExist(picked: Icarta[], folder: string, img: string) {
     for (const tile of picked) {
-       if (tile.img === img && tile.folder === folder) {
-         return true;
-       }
+      if (tile.img === img && tile.folder === folder) {
+        return true;
+      }
     }
     return false;
   }
@@ -105,7 +108,7 @@ export class PlayComponent implements OnInit, AfterViewInit {
     // this folder
     const imgArray = this.all_tiles.get(key) as string[];
     const totalImgs = imgArray.length;
-    const random_index = Math.floor(Math.random() * (totalImgs-1));
+    const random_index = Math.floor(Math.random() * (totalImgs - 1));
     // security control
     if (random_index < 0 || random_index >= totalImgs) {
       return imgArray[0];
@@ -115,7 +118,7 @@ export class PlayComponent implements OnInit, AfterViewInit {
   }
 
   getFolderDifferentTo(keys, folderToAvoid) {
-    let random_index = Math.floor(Math.random() * (keys.length-1));
+    let random_index = Math.floor(Math.random() * (keys.length - 1));
     if (keys[random_index] === folderToAvoid) {
       random_index = random_index + 1 % keys.length;
     }
@@ -123,10 +126,10 @@ export class PlayComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.startCountdown();    
+    this.startCountdown();
   }
 
-  private resetContdown(seconds:number) {
+  private resetContdown(seconds: number) {
     this.timerValue = seconds;
     this.spinnerValue = 100;
     this.timerStep = this.spinnerValue / this.timerValue;
@@ -134,11 +137,11 @@ export class PlayComponent implements OnInit, AfterViewInit {
     this.startCountdown();
   }
 
-  private startCountdown(){
+  private startCountdown() {
     this.interval = setInterval(() => {
       this.timerValue--;
-      this.spinnerValue -= this.timerStep; 
-      if(this.timerValue < 0 ){
+      this.spinnerValue -= this.timerStep;
+      if (this.timerValue < 0) {
         // The code here will run when
         // the timer has reached zero.
         this.timeout();
@@ -231,10 +234,23 @@ export class PlayComponent implements OnInit, AfterViewInit {
 
   private clearSelected() {
     for (const tile of this.cardAData) {
-        tile.selected = false;
+      tile.selected = false;
     }
     for (const tile of this.cardBData) {
       tile.selected = false;
+    }
   }
-  }
+
+  private getRandomArray(arr, size) {
+    const shuffled = arr.slice(0);
+    let i = arr.length;
+    let temp, index;
+    while (i--) {
+        index = Math.floor((i + 1) * Math.random());
+        temp = shuffled[index];
+        shuffled[index] = shuffled[i];
+        shuffled[i] = temp;
+    }
+    return shuffled.slice(0, size);
+}
 }
