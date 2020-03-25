@@ -13,7 +13,7 @@
                         <img [src]="getImgSrc(tile)" alt="" [ngClass]="{
                             'selectable-tile-img':true,
                             'active-tile': tile.selected, 
-                            'solution-by-help': showSolution
+                            'highlight-error': isShowSolutionActive(tile)
                         }">
                     </mat-grid-tile>
                 </mat-grid-list>

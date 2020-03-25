@@ -12,6 +12,10 @@ mat-card {
     margin: 1em;
     opacity: 0.85;
 }
+
+a {
+  color: lightblue;
+}
  
 input:-webkit-autofill,
 input:-webkit-autofill:hover, 
@@ -21,18 +25,23 @@ input:-webkit-autofill:active  {
 }
 
 .icon {
-    display: inline-block;
-    height: 30px;
-    margin: 0 auto;
-    padding-right: 5px;
-    text-align: center;
-    vertical-align: middle;
-    width: 15%;
-  }
+  display: inline-block;
+  height: 30px;
+  margin: 0 auto;
+  padding-right: 5px;
+  text-align: center;
+  vertical-align: middle;
+  width: 15%;
+  padding: 0;
+}
 
-  .label {
-    display: inline-block;
-    line-height: 30px;
-    margin: 0;
-    width: 85%;
-  }
+.label {
+  display: inline-block;
+  line-height: 30px;
+  margin: 0;
+  width: 85%;
+}
+
+.mt-1 {
+  margin-top: 1em;
+}

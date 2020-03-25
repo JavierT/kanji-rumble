@@ -1,0 +1,38 @@
+<section class="auth-container">
+  <form #authForm='ngForm' (ngSubmit)='onSubmit(authForm)' class="main-form">
+    <mat-form-field>
+      <input mat-input type="email" placeholder="Tu
+        email" matInput id="email" ngModel name="email" required email />
+    </mat-form-field>
+
+    <mat-form-field>
+      <input mat-input type="password" matInput placeholder="Contraseña" id="password" ngModel name='password' required
+        minlength="6"/>
+    </mat-form-field>
+
+    <div class="btns-layout">
+      <button mat-raised-button type='submit' color="primary" [disabled]="!authForm.valid">
+        Login
+      </button>
+    </div>
+  </form>
+  <div  class="main-form">
+    <div class="btns-layout">
+      <button mat-raised-button (click)="tryGoogleAuth()">
+        <mat-icon class="icon">how_to_reg</mat-icon>
+        Entrar con la cuenta de Google
+      </button>
+    </div>
+    
+    <div class="btns-layout">
+      <a routerLink="/reset-psw">He olvidado mi contraseña </a>
+    </div>
+    <div class="btns-layout">
+      <div class="redirectToLogin">
+          <span>¿Aun tienes cuenta? <a class="redirect" routerLink="/register">Registrate aquí</a></span>
+      </div>
+  </div>
+  </div>
+
+  
+</section>

@@ -1,0 +1,27 @@
+.auth-container {
+    height:80%;
+    margin-bottom: 2em;
+}
+
+.main-form {
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 2vw;
+}
+
+mat-form-field {
+    width: 300px;
+}
+
+.btns-layout {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-direction: row;
+    width: 300px;
+    margin-top: 2em;
+}
+//kanji020

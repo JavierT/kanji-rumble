@@ -1,11 +1,15 @@
 <div fxLayout="column">
     <div fxFlex fxLayout="row" fxLayoutAlign="center center">
-        <img src="/assets/img/logo2.png" alt="" class="logo">
+        <img src="./assets/img/logo2.png" alt="" class="logo">
     </div>
     <div *ngIf="solved; else firstTime" fxFlex fxLayout="column">
         <div class="description">
             <p class="emphasis">¡BIEN HECHO!</p>
-            <p>Ahora puedes registrarte o entrar con tu cuenta para poder acceder a mas niveles y batir todos los
+            <p>Ahora puedes 
+                <a [routerLink]="'/registrarte'">registrate</a> 
+                 o 
+                <a [routerLink]="'/login'">entrar</a> 
+                 con tu cuenta para poder acceder a mas niveles y batir todos los
                 récords</p>
         </div>
         <div fxFlex fxLayoutAlign="center center">
@@ -53,8 +57,8 @@
                 </mat-card-content>
             </mat-card>
         </div>
-        <div *ngIf="showSolution">
-            <p>La solucion te la va a explicar jorge aqui>>></p>
+        <div *ngIf="showSolution" class="description">
+            <p>La carta que es similar entre ambas es la persona...</p>
         </div>
         <div fxFlex fxLayoutAlign="space-between center" class="btns-container">
             <div class="btn-help" (click)="giveSolution()">

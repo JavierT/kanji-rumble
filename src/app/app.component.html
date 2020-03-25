@@ -6,13 +6,29 @@
         <mat-icon class="icon-sidenav">home</mat-icon>
         <span class="label">Accueil</span>
       </a>
-      <a mat-list-item [routerLink]="'/play'"  (click)="sidenav.toggle()">
+      <div *ngIf="isLoggedIn(); else noLoggedIn">
+        <a mat-list-item [routerLink]="'/account'"  (click)="sidenav.toggle()">
+          <mat-icon class="icon-sidenav">person_pin</mat-icon>
+          <span class="label">Mi cuenta</span>
+        </a>
+      </div>
+      <ng-template #noLoggedIn>
+        <a mat-list-item [routerLink]="'/login'"  (click)="sidenav.toggle()">
+          <mat-icon class="icon-sidenav">person_pin</mat-icon>
+          <span class="label">Login</span>
+        </a>
+      </ng-template>
+      <a *ngIf="isLoggedIn()" mat-list-item [routerLink]="'/play'"  (click)="sidenav.toggle()">
         <mat-icon class="icon-sidenav">play_arrow</mat-icon>
-        <span class="label">Play</span>
+        <span class="label">Jugar</span>
       </a>
-      <a mat-list-item [routerLink]="'/contact'"  (click)="sidenav.toggle()">
-        <mat-icon class="icon-sidenav">contact_support</mat-icon>
-        <span class="label">Nous contacter</span>
+      <a *ngIf="isLoggedIn()" mat-list-item [routerLink]="'/scoreboard'"  (click)="sidenav.toggle()">
+        <mat-icon class="icon-sidenav">score</mat-icon>
+        <span class="label">Puntuaciones</span>
+      </a>
+      <a *ngIf="isLoggedIn()" mat-list-item (click)="logout">
+        <!-- <mat-icon class="icon-sidenav">contact_support</mat-icon> -->
+        <span class="label">Desconectarse</span>
       </a>
       <mat-list-item (click)="sidenav.toggle()">
         <mat-icon class="icon-sidenav">close</mat-icon>
@@ -26,7 +42,7 @@
     <mat-toolbar color="primary">
       <mat-toolbar-row fxLayoutAlign="space-between" fxLayoutGap="20px">
         <div class="logo" fxFlexAlign="center" fxLayout="row">
-          <img class="main-img" src="/assets/img/logo1.png" alt="">
+          <img class="main-img" src="./assets/img/logo1.png" alt="">
           <h1 class="main-text">Kanji Rumble</h1>
         </div>
         <!-- Hiding the menu if resolution is lower than middle -->
@@ -35,13 +51,29 @@
             <mat-icon class="icon">home</mat-icon>
             <span class="label">Accueil</span>
           </a>
-          <a mat-button [routerLink]="'/play'">
-            <mat-icon class="icon">play_arrow</mat-icon>
-            <span class="label">Play</span>
+          <a *ngIf="isLoggedIn(); else noLoggedIn" 
+            mat-button [routerLink]="'/account'">
+            <mat-icon class="icon">person_pin</mat-icon>
+            <span class="label">Mi cuenta</span>
           </a>
-          <a mat-button [routerLink]="'/contact'">
-            <mat-icon class="icon">contact_support</mat-icon>
-            <span class="label">Nous contacter</span>
+          <ng-template #noLoggedIn>
+            <a mat-button [routerLink]="'/login'">
+              <mat-icon class="icon">person_pin</mat-icon>
+              <span class="label">Login</span>
+            </a>
+          </ng-template>
+          
+          <a *ngIf="isLoggedIn()" mat-button [routerLink]="'/play'">
+            <mat-icon class="icon">play_arrow</mat-icon>
+            <span class="label">Jugar</span>
+          </a>
+          <a *ngIf="isLoggedIn()" mat-button [routerLink]="'/scoreboard'">
+            <mat-icon class="icon">score</mat-icon>
+            <span class="label">Puntuaciones</span>
+          </a>
+          <a *ngIf="isLoggedIn()" mat-button (click)="logout()">
+            <!-- <mat-icon class="icon">contact_support</mat-icon> -->
+            <span class="label">Desconectarse</span>
           </a>
         </div>
         <div fxFlexAlign="center" fxHide.gt-sm="true">

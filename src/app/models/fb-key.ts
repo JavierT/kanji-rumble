@@ -1,3 +1,3 @@
 export interface FirebaseId {
-    key: string;
+    id?: string;
 }

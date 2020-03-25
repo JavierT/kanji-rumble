@@ -38,7 +38,7 @@ export class HomeComponent implements OnInit {
   }
 
   getImgSrc(carta: Icarta) {
-    return `/assets/data/${carta.folder}/${carta.img}.jpg`;
+    return `./assets/data/${carta.folder}/${carta.img}.jpg`;
   }
 
   selectTile(where: Icarta[], index: number) {
@@ -107,8 +107,7 @@ export class HomeComponent implements OnInit {
   }
 
   private compareTiles(tile1: Icarta, tile2: Icarta) {
-    return tile1.img === tile2.img
-      && tile1.folder === tile2.folder;
+    return tile1.img === tile2.img;
   }
 
   private clearSelected() {

@@ -1,17 +1,21 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { DataService } from 'app/services/data.service';
 import { Icarta } from 'app/models/carta';
 import { MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
+import { GameMechanics } from './game-mechanics';
+import { AuthService } from 'app/services/auth.service';
+import { Irecord } from 'app/models/records.model.';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-play',
   templateUrl: './play.component.html',
   styleUrls: ['./play.component.scss']
 })
-export class PlayComponent implements OnInit, AfterViewInit {
+export class PlayComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  all_tiles;
+  ready = false;
   lives = [true, true, true];
   currentlives = 3;
 
@@ -19,119 +23,54 @@ export class PlayComponent implements OnInit, AfterViewInit {
   correct = 0;
   intial_timer = 30;
 
-  timerValue = 30;
+  timerValue = this.intial_timer;
   spinnerValue = 100;
   diameterSpinner = 100;
   timerStep = this.spinnerValue / this.timerValue;
-  cardAData: Icarta[] = [];
-  cardBData: Icarta[] = [];
+  //cardAData: Icarta[] = [];
+  //cardBData: Icarta[] = [];
   interval: any;
-  solutionCard: Icarta;
+  //solutionCard: Icarta;
   solved: boolean;
 
-  constructor(private dataService: DataService, private _snackBar: MatSnackBar, private router: Router) { }
+  score = 0;
+  total_time = 0;
+
+  // Used to send the solution tile to the card component
+  sendSolutionTile: Icarta = null;
+  gameMechanics: GameMechanics;
+  subsReady: Subscription;
+  recordSubs: Subscription;
+
+  constructor(private dataService: DataService, private _snackBar: MatSnackBar, private router: Router, private authService: AuthService) {
+    this.gameMechanics = new GameMechanics();
+   }
 
   ngOnInit() {
+    
     this.dataService.getAllTiles().subscribe(
       data => {
-        this.all_tiles = data;
-        this.createRandomCards(this.level);
+        this.gameMechanics.setData(data);
+        this.subsReady = this.gameMechanics.ready.subscribe((res) => {
+          this.ready = res;
+          if (this.ready) {
+            this.startCountdown();
+          }
+        })
+        this.gameMechanics.createRandomCards(this.level);
       });
     if (window.innerWidth < 600) {
       this.diameterSpinner = 40;
     }
   }
 
-  createRandomCards(img_in_card: number) {
-    /**
-     * Problems detected> 
-     *  - I can select the same cart twice
-     *  - I can select two cards that are the same meaning
-     */
-    // Here I have all the tiles in all_tiles in a MAP sorted by
-    // folder_name: array of image names
-    const keys: string[] = Array.from(this.all_tiles.keys());
-    
-    const total_folders = this.all_tiles.size;
-    const pick_random = (img_in_card * 2) - 1;
-    // Here I'll store the picked ones
-    const picked: Icarta[] = [];
-    // Until double of number of tiles - 1, I pick
-    for (let i = 0; i < pick_random; i++) {
-      let random_index = Math.floor(Math.random() * total_folders);
-      // adding just a security control
-      if (random_index < 0 || random_index > (keys.length - 1)) {
-        random_index = 0;
-      };
-      // Here I have a random folder
-      const picked_key = keys[random_index];
-      const img = this.getRandomImgInFolder(picked_key)
-      if (!this.checkIfExist(picked, picked_key, img)) {
-        picked.push({
-          "folder": picked_key,
-          "img": img,
-          "selected": false,
-        });
-      } else {
-        i--;
-      }
-    }
-    // I have already N -1
-    const cardADataTmp = picked.splice(0, img_in_card);
-    const cardBDataTmp = picked.slice(0, picked.length);
-    // Then I select one of the already selected ones to put it
-    // in the cardB array. But there is a mistake because if I do 
-    // that then it's too easy to find as it is the same. I think I
-    // should get a same one in another folder. 
-    let random_index = Math.floor(Math.random() * img_in_card);
-    this.solutionCard = cardADataTmp[random_index];
-    const new_folder = this.getFolderDifferentTo(keys, cardADataTmp[random_index].folder);
-    cardBDataTmp.push({
-      "folder": new_folder,
-      "img": cardADataTmp[random_index].img,
-      "selected": false,
-    });
-    // console.log('cardA: ', cardADataTmp)
-    // console.log('cardB: ', cardBDataTmp)
-    this.cardAData = this.getRandomArray(cardADataTmp, cardADataTmp.length);
-    this.cardBData = this.getRandomArray(cardBDataTmp, cardBDataTmp.length);
-    // console.log('cardA: ', this.cardAData)
-    // console.log('cardB: ', this.cardBData)
+  ngOnDestroy(): void {
+    this.subsReady.unsubscribe();
+    //this.recordSubs.unsubscribe();
   }
 
-  checkIfExist(picked: Icarta[], folder: string, img: string) {
-    for (const tile of picked) {
-      if (tile.img === img) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  getRandomImgInFolder(key: string): string {
-    // I get a random img name of the array of namnes for 
-    // this folder
-    const imgArray = this.all_tiles.get(key) as string[];
-    const totalImgs = imgArray.length;
-    const random_index = Math.floor(Math.random() * totalImgs);
-    // security control
-    if (random_index < 0 || random_index >= totalImgs) {
-      return imgArray[0];
-    } else {
-      return imgArray[random_index];
-    }
-  }
-
-  getFolderDifferentTo(keys, folderToAvoid) {
-    let random_index = Math.floor(Math.random() * (keys.length - 1));
-    if (keys[random_index] === folderToAvoid) {
-      random_index = random_index + 1 % keys.length;
-    }
-    return keys[random_index];
-  }
 
   ngAfterViewInit(): void {
-    this.startCountdown();
   }
 
   private resetContdown(seconds: number) {
@@ -145,6 +84,7 @@ export class PlayComponent implements OnInit, AfterViewInit {
   private startCountdown() {
     this.interval = setInterval(() => {
       this.timerValue--;
+      this.total_time++;
       this.spinnerValue -= this.timerStep;
       if (this.timerValue < 0) {
         // The code here will run when
@@ -160,29 +100,16 @@ export class PlayComponent implements OnInit, AfterViewInit {
   }
 
   public checkIfSuccess(event) {
-    const sel1 = this.getSelected(this.cardAData);
-    const sel2 = this.getSelected(this.cardBData);
+    const sel1 = this.gameMechanics.getSelectedCardA();
+    const sel2 = this.gameMechanics.getSelectedCardB();
     if (sel1 !== null && sel2 !== null) {
       this.checkSolution(sel1, sel2)
     }
-  }
-
-  private getSelected(arrayTiles: Icarta[]): Icarta {
-    for (const tile of arrayTiles) {
-      if (tile.selected) {
-        return tile;
-      }
-    }
-    return null;
-  }
+  }  
 
   private checkSolution(sel1: Icarta, sel2: Icarta) {
     let msg = "";
-
-    const firstCardSol = this.compareTiles(sel1, this.solutionCard);
-    const secCardSol = this.compareTiles(sel2, this.solutionCard);
-
-    if (firstCardSol && secCardSol) {
+    if (this.gameMechanics.isSolutionBetweenTiles(sel1, sel2)) {
       msg = "La solucion es correcta";
       clearInterval(this.interval);
       setTimeout(() => {
@@ -198,22 +125,41 @@ export class PlayComponent implements OnInit, AfterViewInit {
     });
   }
 
+  private setSolution() {
+    // TODO user selection to red, good one to green
+    this.sendSolutionTile = this.gameMechanics.solutionCard;
+  }
+
   private loseALife() {
-    this.clearSelected()
+    clearInterval(this.interval);
+    this.setSolution();
     this.currentlives -= 1;
-    this.lives[this.currentlives] = false;
-    if (this.currentlives == 0) {
-      this._snackBar.open("Has perdido", 'Ok', {
-        duration: 4000,
-      });
-      this.router.navigateByUrl('/');
-    } else {
-      this.createRandomCards(this.level);
-      this.resetContdown(this.intial_timer);
-    }
+    setTimeout(() => {
+      // 3 seconds showing the result
+      this.gameMechanics.clearSelected();
+      this.sendSolutionTile = null;
+      this.lives[this.currentlives] = false;
+      if (this.currentlives == 0) {
+          this._snackBar.open("Has perdido", 'Ok', {
+            duration: 4000,
+          });
+          this.dataService.saveRecord(this.createRecord())
+          this.router.navigate(['game-over'])
+          // this.recordSubs = this.dataService.lastRecord.subscribe(
+          //   (res) => {
+          //     console.log("record", res);
+          //     this.router.navigate(['game-over'])
+          //   }
+          // );
+        } else {
+          this.gameMechanics.createRandomCards(this.level);
+          this.resetContdown(this.intial_timer);
+        }
+      }, 3500);
   }
 
   private nextLevel() {
+    this.score += this.level * 5;
     this.intial_timer = 30;
     this.correct += 1;
     if (this.correct === 3) {
@@ -229,33 +175,31 @@ export class PlayComponent implements OnInit, AfterViewInit {
         this.level += 1
       }
     }
-    this.createRandomCards(this.level);
+    this.gameMechanics.createRandomCards(this.level);
     this.resetContdown(this.intial_timer);
   }
 
-  private compareTiles(tile1: Icarta, tile2: Icarta) {
-    return tile1.img === tile2.img;
-  }
 
-  private clearSelected() {
-    for (const tile of this.cardAData) {
-      tile.selected = false;
-    }
-    for (const tile of this.cardBData) {
-      tile.selected = false;
+  private createRecord(): Irecord {
+    const player = this.authService.userUid;
+    // if (user === null) {
+    //   this.authService.getUserData()
+    //   .subscribe(
+    //     (player) => user = player.uid, 
+    //     (error) => {
+    //       this._snackBar.open("Lo sentimos, no se ha podido guardar tu record", 'Ok', {
+    //         duration: 3000});
+    //       return null;
+    //     }
+    //   );
+    // }
+    return {
+      "userId": player,
+      "score": this.score,
+      "level" : this.level,
+      "percent": 100,
+      "timestamp": new Date(),
+      "total_time" : this.total_time
     }
   }
-
-  private getRandomArray(arr, size) {
-    const shuffled = arr.slice(0);
-    let i = arr.length;
-    let temp, index;
-    while (i--) {
-        index = Math.floor((i + 1) * Math.random());
-        temp = shuffled[index];
-        shuffled[index] = shuffled[i];
-        shuffled[i] = temp;
-    }
-    return shuffled.slice(0, size);
-}
 }

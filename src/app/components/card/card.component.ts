@@ -10,7 +10,7 @@ export class CardComponent implements OnInit {
 
   @Input() title: string;
   @Input() cardData: Icarta[];
-  @Input() showSolution?: boolean = false;
+  @Input() showSolution?: Icarta = null;
   @Output() selected: EventEmitter<Icarta> = new EventEmitter<Icarta>();
 
   constructor() { }
@@ -20,7 +20,7 @@ export class CardComponent implements OnInit {
   }
 
   getImgSrc(carta: Icarta) {
-    return `/assets/data/${carta.folder}/${carta.img}.jpg`;
+    return `./assets/data/${carta.folder}/${carta.img}.jpg`;
   }
 
   selectTile(where: Icarta[], index: number) {
@@ -29,6 +29,15 @@ export class CardComponent implements OnInit {
     }
     where[index].selected = true;
     this.selected.emit(where[index]);
+  }
+
+  isShowSolutionActive(tile: Icarta): boolean {
+    if (this.showSolution === null) {
+      return false;
+    } else {
+      return this.showSolution.img === tile.img;
+    }  
+
   }
 
   

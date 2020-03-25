@@ -1,0 +1,52 @@
+{
+	"card1": [{
+			"folder": "pictures",
+			"img": "28"
+		},
+		{
+			"folder": "print",
+			"img": "24"
+		},
+		{
+			"folder": "translation",
+			"img": "55"
+		},
+		{
+			"folder": "calligraphy",
+			"img": "35"
+		},
+		{
+			"folder": "translation",
+			"img": "57"
+		}
+	],
+	"card2": [{
+			"folder": "translation",
+			"img": "3"
+		},
+		{
+			"folder": "pictures",
+			"img": "55"
+		},
+		{
+			"folder": "print",
+			"img": "54"
+		},
+		{
+			"folder": "calligraphy",
+			"img": "14"
+		},
+		{
+			"folder": "pictures",
+			"img": "48"
+		}
+	],
+	"solution1": {
+		"folder": "calligraphy",
+		"img": "55"
+	},
+	"solution2": {
+		"folder": "pictures",
+		"img": "55"
+	}
+}

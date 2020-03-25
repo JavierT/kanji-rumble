@@ -1,0 +1,44 @@
+.item-record {
+    display: flex;
+    margin: 2em;
+}
+
+.diff {
+    padding-left: 0.5em;
+    color: grey;
+}
+
+
+.greyDiff {
+    @extend .diff;
+    color: grey;
+}
+
+.greenDiff {
+    @extend .diff;
+    color: green;
+}
+
+.redDiff {
+    @extend .diff;
+    color: red;
+}
+
+label {
+    display: flex;
+    align-self: center;
+    padding-right: 1em;
+}
+
+.big-number {
+    font-size: xx-large;
+}
+
+.btns-layout {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-direction: row;
+    width: 300px;
+    margin-top: 2em;
+}

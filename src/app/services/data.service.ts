@@ -1,10 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
+import { map, catchError, flatMap } from 'rxjs/operators';
 import { Icarta } from 'app/models/carta';
 import { FirebaseId } from 'app/models/fb-key';
 import { MyError } from 'app/models/my-error';
+import { Irecord } from 'app/models/records.model.';
+import { Player } from 'app/models/player.model';
+import { AngularFirestore } from '@angular/fire/firestore';
 
 
 @Injectable({
@@ -14,9 +17,12 @@ import { MyError } from 'app/models/my-error';
 export class DataService {
   
     firebaseUrl: string = "https://kenji-83f0d.firebaseio.com/"
-    private _urlGameExample = 'assets/data/game_example.json';
+    private _urlGameExample = './assets/data/game_example.json';
 
-    constructor(private http: HttpClient) {
+    public lastRecord = new Subject<Irecord>();
+    public oldRecord = new Subject<Irecord>();
+
+    constructor(private http: HttpClient, private firestore: AngularFirestore) {
 
     }
 
@@ -47,39 +53,69 @@ export class DataService {
         );
     }
     /************************ NEWS *************************************************/
-    // getNews(): Observable<Inews[]>{
-    //     return this.http.get<{ [key:string]: Inews}>(`${this.firebaseUrl}news.json`)
-    //         .pipe(map(responseData => {
-    //             const a_news: Inews[] = [];
-    //             for (const key in responseData) {
-    //                 if(responseData.hasOwnProperty(key)) {
-    //                     a_news.push({...responseData[key], id:key});
-    //                 }
-    //             }
-    //             return a_news;
-    //         }),
-    //         catchError(errorRes => {
-    //             console.log('error: ', errorRes);
-    //             throw new MyError(errorRes);
-    //         })
-    //     );
-    // }
+    createRecord(record: Irecord){
+        this.lastRecord.next(record);
+        return this.firestore.collection('records').add(record);
+    }
 
-    // updateNew(to_save: Inews, field:string): Observable<any> {
-    //     const key = `${to_save.id}/${field}`;
-    //     const data = {};
-    //     data[key] = to_save[field];
-    //     console.log(data);
-    //     return this.http.patch<FirebaseId>(`${this.firebaseUrl}news.json`, data);
-    // }
+    getTenBestRecords() {
+        return this.firestore.collection<Irecord>('records', 
+        ref => ref.orderBy('timestamp', 'desc')
+        .limit(10)).snapshotChanges()
+    }
 
-    // postNew(to_save: Inews): Observable<FirebaseId> {
-    //     return this.http.post<FirebaseId>(`${this.firebaseUrl}news.json`, to_save);
-    // }
+    getTenLastRecordsFilterByDate(beginningDateObject: Date) {
+        console.log('filter date ', beginningDateObject)
+        return this.firestore.collection<Irecord>('records', 
+        ref => ref.where('timestamp', '>', beginningDateObject).orderBy('timestamp', 'desc')//.orderBy('score', 'desc')
+        .limit(10)).snapshotChanges()
+    }
 
-    // deleteNew(selNew: Inews): Observable<any> {
-    //     return this.http.delete(`${this.firebaseUrl}news/${selNew.id}.json`, );
-    // }
+    /**
+     * This is called to retrieve the last record of this player and save it 
+     * @param userId 
+     */
+    getRecordByUserId(userId) {
+        const snapshotResult = this.firestore.collection("records",  
+            ref => ref.where('userId', '==', userId).limit(1))
+            .snapshotChanges()
+            .pipe(flatMap(records => records)); 
+        snapshotResult.subscribe(doc => {
+            this.lastRecord.next(<Irecord>doc.payload.doc.data());
+            console.log("last known record", this.lastRecord)
+        });
+    }
+    
+
+    saveRecord(record: Irecord) {
+        const snapshotResult = this.firestore.collection("records",  
+            ref => ref.where('userId', '==', record.userId).limit(1))
+            .snapshotChanges()
+            .pipe(flatMap(records => records)); 
+        snapshotResult.subscribe(doc => {
+            const recordRef = doc.payload.doc.ref;
+            const recordDB = <Irecord>doc.payload.doc.data()
+            this.oldRecord.next(recordDB);
+            console.log(this.oldRecord);
+            if (this.isBetterRecord(recordDB, record)) {
+                recordRef.update(record);
+            }
+            this.lastRecord.next(record);
+        });
+    }
+
+    private isBetterRecord(oldR: Irecord, newR: Irecord) {
+        if (oldR.score !== newR.score) {
+            return newR.score > oldR.score;
+        } else {
+            return newR.total_time < oldR.total_time;
+        }
+    }
+
+    getPlayers() {
+        return this.firestore.collection('users').snapshotChanges()
+    }
+
     /******************************************************************************* */
 
 }

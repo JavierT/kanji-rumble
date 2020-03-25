@@ -16,23 +16,29 @@ import { AppComponent } from './app.component';
 import { ContactComponent } from './components/contact/contact.component';
 import { HomeComponent } from './components/home/home.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { LoginComponent } from './auth/login/login.component';
-import { AuthInterceptorService } from './services/auth-interceptor.service';
+import { LoginComponent } from './components/auth/login/login.component';
 import { PlayComponent } from './components/play/play.component';
 import { CardComponent } from './components/card/card.component';
-
+import { AuthService } from './services/auth.service';
+import { RegisterComponent } from './components/auth/register/register.component';
+import { ResetPasswordComponent } from './components/auth/reset-password/reset-password.component';
+import { PlayerAccountComponent } from './components/player-account/player-account.component';
+import { VerifyEmailComponent } from './components/auth/verify-email/verify-email.component';
+import { ScoreboardComponent } from './components/scoreboard/scoreboard.component';
+import { GameOverComponent } from './components/game-over/game-over.component';
+import { MinuteSecondsPipe } from './pipes/minute-seconds.pipe';
+import { RankingTableComponent } from './components/ranking-table/ranking-table.component';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBgQ5jksmMKzXjbfsy41R1sFemmMzc4_ck",
-  authDomain: "kenji-83f0d.firebaseapp.com",
-  databaseURL: "https://kenji-83f0d.firebaseio.com",
-  projectId: "kenji-83f0d",
-  storageBucket: "kenji-83f0d.appspot.com",
-  messagingSenderId: "147387876256",
-  appId: "1:147387876256:web:5525ed09f835a65a0e9ac5",
-  measurementId: "G-05E4MSZPCE"
+  apiKey: "AIzaSyA4AGlXbkDg9KUwTDAX7IpLHMVjiLzViqE",
+  authDomain: "kanjirumble-9d2fa.firebaseapp.com",
+  databaseURL: "https://kanjirumble-9d2fa.firebaseio.com",
+  projectId: "kanjirumble-9d2fa",
+  storageBucket: "kanjirumble-9d2fa.appspot.com",
+  messagingSenderId: "990671350353",
+  appId: "1:990671350353:web:2a4e5ad8aa872cbc6da670",
+  measurementId: "G-H7VTVBCB7C"
 };
-
 
 @NgModule({
   declarations: [
@@ -42,6 +48,14 @@ const firebaseConfig = {
     LoginComponent,
     PlayComponent,
     CardComponent,
+    RegisterComponent,
+    ResetPasswordComponent,
+    PlayerAccountComponent,
+    VerifyEmailComponent,
+    ScoreboardComponent,
+    GameOverComponent,
+    MinuteSecondsPipe,
+    RankingTableComponent,
   ],
   imports: [
     BrowserModule,
@@ -56,11 +70,7 @@ const firebaseConfig = {
     AngularFireAuthModule, // auth
     AngularFireStorageModule, // storage,
   ],
-  providers: [{
-    provide: HTTP_INTERCEPTORS, 
-    useClass: AuthInterceptorService, 
-    multi:true}
-  ],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

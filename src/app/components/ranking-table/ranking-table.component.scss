@@ -1,0 +1,35 @@
+@import '../../../variables.scss';
+
+.padding-center {
+    display: flex;
+    align-content: center;
+    align-items: center;
+    margin: 2em;
+    flex-direction: column;
+
+    @media (max-width: $breakpoint-mobile){
+        margin: 1em;
+    }
+
+    
+
+    
+}
+
+table {
+    width: 90%;
+    margin: 0 auto;
+    text-align: center !important;
+    @media (max-width: $breakpoint-mobile){
+        width: 100%;
+    }
+}
+
+text-center {
+    text-align: center !important;
+}
+
+  
+  .mat-header-cell {
+    text-align: center;
+  }
