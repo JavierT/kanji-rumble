@@ -97,7 +97,7 @@ export class DataService {
             ref => ref.where('userId', '==', record.userId).limit(1))
             .snapshotChanges()
             .pipe(flatMap(records => records)); 
-        snapshotResult.subscribe(doc => {
+        snapshotResult.pipe(take(1)).subscribe(doc => {
             const recordRef = doc.payload.doc.ref;
             const recordDB = <Irecord>doc.payload.doc.data()
             this.oldRecord.next(recordDB);

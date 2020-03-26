@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { DataService } from 'app/services/data.service';
 import { Icarta } from 'app/models/carta';
 import { MatSnackBar } from '@angular/material';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -9,7 +10,7 @@ import { MatSnackBar } from '@angular/material';
   styleUrls: ['./home.component.scss'],
 })
 
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
 
   carta1ejemplo: Icarta[] = [];
   carta2ejemplo: Icarta[] = [];
@@ -18,12 +19,13 @@ export class HomeComponent implements OnInit {
   askForHelp: number = 0;
   showSolution: boolean = false;
   solved = false;
+  subscription: Subscription;
 
   constructor(private dataService: DataService, private _snackBar: MatSnackBar) {
   }
 
   ngOnInit() {
-    this.dataService.getCardExample()
+    this.subscription = this.dataService.getCardExample()
       .subscribe((res) => {
 
         for (const carta of res.card1) {
@@ -35,6 +37,10 @@ export class HomeComponent implements OnInit {
         this.solutionTile1 = res.solution1 as Icarta;
         this.solutionTile2 = res.solution2 as Icarta;
       })
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   getImgSrc(carta: Icarta) {

@@ -27,7 +27,7 @@ export class AuthService {
   ) {    
     /* Saving user data in localstorage when 
     logged in and setting up null when logged out */
-    this.afAuth.authState.subscribe(user => {
+    this.afAuth.authState.pipe(take(1)).subscribe(user => {
       if (user) {
         this.playerData = this.parseFbUsertoPlayer(user);
         localStorage.setItem('user', JSON.stringify(this.playerData));
@@ -119,7 +119,8 @@ export class AuthService {
   // Returns true when user is looged in and email is verified
   get isLoggedIn(): boolean {
     const user = JSON.parse(localStorage.getItem('user'));
-    return (user !== null && user.emailVerified !== false) ? true : false;
+    return (user !== null) ? true : false;
+    //return (user !== null && user.emailVerified !== false) ? true : false;
   }
 
   get userUid(): string {
@@ -155,7 +156,7 @@ export class AuthService {
   setUserData(user, displayName=null): BehaviorSubject<Player> {
     const ready = new BehaviorSubject<Player>(null);
     const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
-    userRef.get().subscribe((doc) => {
+    userRef.get().pipe(take(1)).subscribe((doc) => {
       if (doc.exists) {
       } else {
           const playerData: Player = {

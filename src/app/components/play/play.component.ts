@@ -41,6 +41,7 @@ export class PlayComponent implements OnInit, AfterViewInit, OnDestroy {
   gameMechanics: GameMechanics;
   subsReady: Subscription;
   recordSubs: Subscription;
+  tilesSubs: Subscription;
 
   constructor(private dataService: DataService, private _snackBar: MatSnackBar, private router: Router, private authService: AuthService) {
     this.gameMechanics = new GameMechanics();
@@ -66,7 +67,7 @@ export class PlayComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subsReady.unsubscribe();
-    //this.recordSubs.unsubscribe();
+    this.tilesSubs.unsubscribe();
   }
 
 
@@ -145,12 +146,6 @@ export class PlayComponent implements OnInit, AfterViewInit, OnDestroy {
           });
           this.dataService.saveRecord(this.createRecord())
           this.router.navigate(['game-over'])
-          // this.recordSubs = this.dataService.lastRecord.subscribe(
-          //   (res) => {
-          //     console.log("record", res);
-          //     this.router.navigate(['game-over'])
-          //   }
-          // );
         } else {
           this.gameMechanics.createRandomCards(this.level);
           this.resetContdown(this.intial_timer);
@@ -160,7 +155,6 @@ export class PlayComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private nextLevel() {
     this.score += this.level * 5;
-    this.intial_timer = 30;
     this.correct += 1;
     if (this.correct === 3) {
       this.correct = 0;
