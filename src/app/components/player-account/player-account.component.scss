@@ -40,3 +40,19 @@
         padding-right: 0.5em;
     }
 }
+
+.item-record {
+    display: flex;
+    margin: 2em;
+
+    label {
+        display: flex;
+        align-self: center;
+        margin-right: 0.5em;
+    }
+}
+
+
+.big-number {
+    font-size: x-large;
+}

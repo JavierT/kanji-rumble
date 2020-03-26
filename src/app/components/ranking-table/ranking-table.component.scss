@@ -25,6 +25,21 @@ table {
     }
 }
 
+.podiun {
+    display: flex;
+    justify-content: flex-start;
+    
+    img {
+        max-width: 20px;
+        margin-right: 5px;
+    }
+
+    label {
+        align-self: center;
+    }
+}
+
+
 text-center {
     text-align: center !important;
 }

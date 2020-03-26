@@ -1,19 +1,22 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { DataService } from 'app/services/data.service';
 import { Irecord } from 'app/models/records.model.';
 import { Player } from 'app/models/player.model';
-import { forkJoin, combineLatest } from 'rxjs';
+import { forkJoin, combineLatest, pipe, Subject, Subscription } from 'rxjs';
 import { MediaObserver, MediaChange } from '@angular/flex-layout';
 import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-scoreboard',
   templateUrl: './scoreboard.component.html',
   styleUrls: ['./scoreboard.component.scss']
 })
-export class ScoreboardComponent implements OnInit {
+export class ScoreboardComponent implements OnInit, OnDestroy {
 
   allUsers: Map<string, Player>;
+  subs: Subscription;
+
 
   constructor(private dataService: DataService, public breakpointObserver: BreakpointObserver) { }
 
@@ -28,7 +31,7 @@ export class ScoreboardComponent implements OnInit {
     const weekDate = new Date(d.getFullYear(), d.getMonth(), d.getDate() + (day == 0?-6:1)-day);
     const monthDate = new Date(d.getFullYear(), d.getMonth(), 1);
     this.allUsers = new Map<string, Player>();
-    combineLatest(this.dataService.getPlayers(), this.dataService.getTenBestRecords(), 
+    this.subs = combineLatest(this.dataService.getPlayers(), this.dataService.getTenBestRecords(), 
     this.dataService.getTenLastRecordsFilterByDate(weekDate), this.dataService.getTenLastRecordsFilterByDate(monthDate))
     .subscribe(([resPlayer, resRecords, resRecordsWeek, resRecordsMonth]) => {
       if (resPlayer !== null && resRecords !== null) {
@@ -36,25 +39,25 @@ export class ScoreboardComponent implements OnInit {
           this.allUsers.set(e.payload.doc.id, {
                 ...e.payload.doc.data() as Player });
         });
-        this.dataSource = resRecords.map(e => {
+        this.dataSource =  this.sortDataSet(resRecords.map(e => {
           return  { id: e.payload.doc.id,
             username: this.getUserName(e.payload.doc.data().userId),
             ...e.payload.doc.data() as Irecord };
           }
-        );
-        console.log(this.dataSource)
-        this.dataSourceWeek = resRecordsWeek.map(e => {
+        ));
+        this.dataSourceWeek = this.sortDataSet(resRecordsWeek.map(e => {
           return  { id: e.payload.doc.id,
             username: this.getUserName(e.payload.doc.data().userId),
             ...e.payload.doc.data() as Irecord };
           }
-        );
-        this.dataSourceMonth = resRecordsMonth.map(e => {
+        ));
+        
+        this.dataSourceMonth = this.sortDataSet(resRecordsMonth.map(e => {
           return  { id: e.payload.doc.id,
             username: this.getUserName(e.payload.doc.data().userId),
             ...e.payload.doc.data() as Irecord };
           }
-        );
+        ));
       }
     });
   }
@@ -72,7 +75,15 @@ export class ScoreboardComponent implements OnInit {
       });
   }
 
+  ngOnDestroy(): void {
+    this.subs.unsubscribe();
+  }
+
   getUserName(uid) {
     return this.allUsers.get(uid).displayName;
+  }
+
+  sortDataSet(dataSet: Irecord[]) {
+    return dataSet.sort((a, b) => b.score - a.score);
   }
 }

@@ -4,10 +4,11 @@ import { AngularFireAuth } from "@angular/fire/auth";
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { Router } from "@angular/router";
 import { Player } from 'app/models/player.model';
-import { throwError, BehaviorSubject } from 'rxjs';
+import { throwError, BehaviorSubject, Subject } from 'rxjs';
 import { MyError } from 'app/models/my-error';
 import { DataService } from './data.service';
 import { Irecord } from 'app/models/records.model.';
+import { take } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -56,10 +57,11 @@ export class AuthService {
 
 
   getUserData() {
-    const ready = new BehaviorSubject<Player>(null);
-    this.afAuth.authState.subscribe(user => {
+    const ready = new Subject<Player>();
+    this.afAuth.authState.pipe(take(1)).subscribe(user => {
       if (user) {
         this.playerData = this.parseFbUsertoPlayer(user);
+        console.log(user)
         ready.next(this.playerData);
       } else {
         ready.thrownError( new MyError("Se ha producido un error al cargar los datos del jugador"))
@@ -88,7 +90,6 @@ export class AuthService {
   registerWithEmail(email, password, username) {
     return this.afAuth.auth.createUserWithEmailAndPassword(email, password)
       .then((result) => {
-        console.log(result)
         this.setUserData(result.user, username);
         this.sendVerificationMail();
         this.ngZone.run(() => {
@@ -129,13 +130,17 @@ export class AuthService {
 //   // Sign in with Google
   googleAuth() {
     return this.authLogin(new auth.GoogleAuthProvider()).then((result) => {
-      this.setUserData(result.user);
-      this.ngZone.run(() => {
-        this.router.navigate(['/account']);
+      const subs = this.setUserData(result.user).pipe(take(1)).subscribe(() => {
+        console.log("user data saved")
+        this.ngZone.run(() => {
+          console.log("doing redirection to account")
+          this.router.navigate(['account']);
+        });
+        
       });
     }).catch((error) => {
       console.log(error)
-      throwError( new MyError("Autentificacion con Google fallida"));
+      throw new MyError("Autentificacion con Google fallida");
     });
   }
 
@@ -147,14 +152,12 @@ export class AuthService {
   /* Setting up user data when sign in with username/password, 
   sign up with username/password and sign in with social auth  
   provider in Firestore database using AngularFirestore + AngularFirestoreDocument service */
-  setUserData(user, displayName=null) {
+  setUserData(user, displayName=null): BehaviorSubject<Player> {
+    const ready = new BehaviorSubject<Player>(null);
     const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
     userRef.get().subscribe((doc) => {
       if (doc.exists) {
-          console.log("Document data:", doc.data());
       } else {
-          // doc.data() will be undefined in this case
-          console.log("No such document!");
           const playerData: Player = {
             uid: user.uid,
             email: user.email,
@@ -162,20 +165,23 @@ export class AuthService {
             photoURL: user.photoURL,
             emailVerified: user.emailVerified
           }
-          this.saveInStorage(user);
           userRef.set(playerData, {
             merge: true
           })
-          this.createEmptyRecord(user.uid);
+          const record = this.dataService.createEmptyRecord(user.uid);
+          this.dataService.createRecord(record);
       }
-    }); 
+      this.saveInStorage(user);
+      ready.next(user);
+    });
+    return ready;
   }
 
   // Sign out 
   signOut() {
     return this.afAuth.auth.signOut().then(() => {
       localStorage.removeItem('user');
-      this.router.navigate(['home']);
+      //this.router.navigate(['home']);
       return true;
     }).catch((error) => {
       console.log(error)
@@ -185,18 +191,6 @@ export class AuthService {
 
   forgotPassword(passwordResetEmail) {
     return this.afAuth.auth.sendPasswordResetEmail(passwordResetEmail)
-  }
-
-  private createEmptyRecord(userUid) {
-    const record: Irecord = {
-      "userId": userUid,
-      "score": 0,
-      "level": 0,
-      "percent": 0,
-      "timestamp": new Date(),
-      "total_time": 0
-    }
-    this.dataService.createRecord(record);
   }
 
 }

@@ -16,7 +16,6 @@ export class CardComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    console.log('cardData:', this.cardData)
   }
 
   getImgSrc(carta: Icarta) {
