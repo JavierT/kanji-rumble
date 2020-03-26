@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material';
@@ -15,7 +15,8 @@ export class LoginComponent implements OnInit {
 
   constructor(private authService: AuthService, private dataService: DataService,
     private router: Router, private route: ActivatedRoute,
-    private _snackBar: MatSnackBar) { }
+    private _snackBar: MatSnackBar, 
+    private cdr: ChangeDetectorRef) { }
 
   ngOnInit() {
   }
@@ -44,7 +45,9 @@ export class LoginComponent implements OnInit {
   }
 
   doActionsAfterLogin() {
+    console.log("Successful login")
     this.dataService.getRecordByUserId(this.authService.userUid);
+    this.cdr.detectChanges();
   }
 
 signOut() {

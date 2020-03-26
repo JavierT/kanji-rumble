@@ -1,7 +1,8 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { AuthService } from './services/auth.service';
 import { Subscription } from 'rxjs'
 import { Router } from '@angular/router';
+import { MatSidenav } from '@angular/material';
 
 @Component({
   selector: 'app-root',
@@ -12,6 +13,8 @@ export class AppComponent implements OnInit, OnDestroy {
   title = 'kanji';
   private userSub: Subscription;
   public isAuthenticated = false;
+
+  @ViewChild('sidenav', {static:true}) public myNav: MatSidenav;
 
   constructor(private authService: AuthService, private router: Router) {
 
@@ -28,8 +31,16 @@ export class AppComponent implements OnInit, OnDestroy {
     this.userSub.unsubscribe();
   }
 
+  login(){
+    console.log("called login")
+    this.myNav.toggle();
+    this.router.navigate(['login']);
+  }
+
   logout(){
     this.authService.signOut();
+    this.myNav.close();
+    this.router.navigate(['login']);
   }
 
 }

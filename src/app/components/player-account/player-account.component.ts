@@ -1,9 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AuthService } from 'app/services/auth.service';
 import { Player } from 'app/models/player.model';
 import { MatSnackBar } from '@angular/material';
 import { MyError } from 'app/models/my-error';
 import { Router } from '@angular/router';
+import { DataService } from 'app/services/data.service';
+import { Irecord } from 'app/models/records.model.';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 
 @Component({
@@ -11,22 +15,40 @@ import { Router } from '@angular/router';
   templateUrl: './player-account.component.html',
   styleUrls: ['./player-account.component.scss']
 })
-export class PlayerAccountComponent implements OnInit {
+export class PlayerAccountComponent implements OnInit, OnDestroy {
   public playerData: Player;
+  public lastRecord: Irecord = null;
+  private unsubscribe = new Subject<void>();
 
-  constructor(private authService: AuthService, private _snackBar: MatSnackBar, private router: Router) {
+  constructor(private authService: AuthService, 
+    private _snackBar: MatSnackBar, 
+    private router: Router,
+    private dataService: DataService) {
     this.playerData = null;
   }
 
   ngOnInit() {
     this.authService.getUserData()
-      .subscribe(
-        (player) => this.playerData = player, 
+      .pipe(takeUntil(this.unsubscribe)).subscribe(
+        (player) => {
+          this.playerData = player;
+          console.log(player)
+          this.dataService.getRecordByUserId(player.uid);
+          this.dataService.lastRecord.pipe(takeUntil(this.unsubscribe))
+            .subscribe((record) => {
+            this.lastRecord = record;
+          })
+        }, 
         (error: MyError) => {
           this._snackBar.open(error.msg, 'Ok', {
             duration: 3000});
         }
       );
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe.next();
+    this.unsubscribe.complete();
   }
 
   tryResendEmail() {

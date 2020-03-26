@@ -26,6 +26,24 @@
 
     <div class="records">
       <h3>Tus récords personales</h3>
+        <div *ngIf="lastRecord !== null">
+          <div class="item-record">
+              <label for="score">Tu mejor puntuacion ha sido:</label>
+              <span class="big-number">{{lastRecord.score}}</span>
+          </div>
+          <div class="item-record">
+              <label for="time">El tiempo utilizado:</label>
+              <span  class="big-number">{{lastRecord.total_time | minuteSeconds}}</span>
+          </div>
+          <div class="item-record">
+              <label for="level">El maximo nivel alcanzado:</label>
+              <span>{{lastRecord.level}}</span>
+          </div>
+          <!-- <div class="item-record">
+            <label for="date">Fecha:</label>
+            <span>{{lastRecord.timestamp}}</span>
+          </div> -->
+      </div>
     </div>
   </div>
 </div>

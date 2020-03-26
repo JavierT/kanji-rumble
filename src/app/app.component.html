@@ -6,30 +6,32 @@
         <mat-icon class="icon-sidenav">home</mat-icon>
         <span class="label">Accueil</span>
       </a>
-      <div *ngIf="isLoggedIn(); else noLoggedIn">
+
+      <div *ngIf="isLoggedIn()">
         <a mat-list-item [routerLink]="'/account'"  (click)="sidenav.toggle()">
           <mat-icon class="icon-sidenav">person_pin</mat-icon>
           <span class="label">Mi cuenta</span>
         </a>
-      </div>
-      <ng-template #noLoggedIn>
-        <a mat-list-item [routerLink]="'/login'"  (click)="sidenav.toggle()">
+      
+        <a mat-list-item [routerLink]="'/play'"  (click)="sidenav.toggle()">
+          <mat-icon class="icon-sidenav">play_arrow</mat-icon>
+          <span class="label">Jugar</span>
+        </a>
+        <a mat-list-item [routerLink]="'/scoreboard'"  (click)="sidenav.toggle()">
+          <mat-icon class="icon-sidenav">score</mat-icon>
+          <span class="label">Puntuaciones</span>
+        </a>
+        <a mat-list-item (click)="logout()">
+          <mat-icon class="icon-sidenav">exit_to_app</mat-icon>
+          <span class="label">Desconectarse</span>
+        </a>
+    </div>
+      <div *ngIf="!isLoggedIn()">
+        <a mat-list-item (click)="login()">
           <mat-icon class="icon-sidenav">person_pin</mat-icon>
           <span class="label">Login</span>
         </a>
-      </ng-template>
-      <a *ngIf="isLoggedIn()" mat-list-item [routerLink]="'/play'"  (click)="sidenav.toggle()">
-        <mat-icon class="icon-sidenav">play_arrow</mat-icon>
-        <span class="label">Jugar</span>
-      </a>
-      <a *ngIf="isLoggedIn()" mat-list-item [routerLink]="'/scoreboard'"  (click)="sidenav.toggle()">
-        <mat-icon class="icon-sidenav">score</mat-icon>
-        <span class="label">Puntuaciones</span>
-      </a>
-      <a *ngIf="isLoggedIn()" mat-list-item (click)="logout">
-        <!-- <mat-icon class="icon-sidenav">contact_support</mat-icon> -->
-        <span class="label">Desconectarse</span>
-      </a>
+      </div>
       <mat-list-item (click)="sidenav.toggle()">
         <mat-icon class="icon-sidenav">close</mat-icon>
         <span class="label">Fermer</span>

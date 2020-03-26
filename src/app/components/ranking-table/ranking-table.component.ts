@@ -4,6 +4,7 @@ import { Player } from 'app/models/player.model';
 import { DataService } from 'app/services/data.service';
 import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout';
 import { combineLatest } from 'rxjs';
+import { MatSort } from '@angular/material';
 
 @Component({
   selector: 'app-ranking-table',
@@ -15,7 +16,33 @@ export class RankingTableComponent{
   @Input() title: string = "Mejores puntuaciones";
   @Input() cols: string[] = ['name', 'score', 'total_time', 'max_level', 'timestamp'];
 
-  constructor() { }
+  private matSort: MatSort;
 
+  constructor() {
+   }
+
+   public isPodium(element: Irecord) {
+     return element.id === this.dataset[0].id ||
+      element.id === this.dataset[1].id ||
+      element.id === this.dataset[2].id;
+   }
+
+   public getPodiumImg(element: Irecord) {
+    let src = "";
+    switch (element.id) {
+      case this.dataset[0].id:
+        src = "first";
+        break;
+      case this.dataset[1].id:
+        src = "second";
+        break;
+      case this.dataset[2].id:
+        src = "third";
+        break;
+      default:
+        break;
+    }
+    return `/assets/img/${src}.png`
+   }
 
 }

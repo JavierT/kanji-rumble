@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
-import { map, catchError, flatMap } from 'rxjs/operators';
+import { map, catchError, flatMap, take } from 'rxjs/operators';
 import { Icarta } from 'app/models/carta';
 import { FirebaseId } from 'app/models/fb-key';
 import { MyError } from 'app/models/my-error';
@@ -41,7 +41,6 @@ export class DataService {
                         a_tiles.set(key, element)
                     }
                 }
-                console.log(a_tiles)
                 return a_tiles;
 
                  
@@ -65,7 +64,6 @@ export class DataService {
     }
 
     getTenLastRecordsFilterByDate(beginningDateObject: Date) {
-        console.log('filter date ', beginningDateObject)
         return this.firestore.collection<Irecord>('records', 
         ref => ref.where('timestamp', '>', beginningDateObject).orderBy('timestamp', 'desc')//.orderBy('score', 'desc')
         .limit(10)).snapshotChanges()
@@ -76,13 +74,20 @@ export class DataService {
      * @param userId 
      */
     getRecordByUserId(userId) {
-        const snapshotResult = this.firestore.collection("records",  
+        const snapshotResult = this.firestore.collection<Irecord>("records",  
             ref => ref.where('userId', '==', userId).limit(1))
-            .snapshotChanges()
-            .pipe(flatMap(records => records)); 
-        snapshotResult.subscribe(doc => {
-            this.lastRecord.next(<Irecord>doc.payload.doc.data());
-            console.log("last known record", this.lastRecord)
+            .snapshotChanges();
+            // .pipe(flatMap(records => records)); 
+        snapshotResult.pipe(take(1)).subscribe(doc => {
+            let arrayRec = []
+            arrayRec = doc.map(e => {
+                return  { id: e.payload.doc.id,
+                    ...e.payload.doc.data() as Irecord };
+                })
+            console.log("setting last record data")
+            if(arrayRec.length > 0) {
+                this.lastRecord.next(arrayRec[0]);
+            }
         });
     }
     
@@ -96,7 +101,6 @@ export class DataService {
             const recordRef = doc.payload.doc.ref;
             const recordDB = <Irecord>doc.payload.doc.data()
             this.oldRecord.next(recordDB);
-            console.log(this.oldRecord);
             if (this.isBetterRecord(recordDB, record)) {
                 recordRef.update(record);
             }
@@ -109,6 +113,17 @@ export class DataService {
             return newR.score > oldR.score;
         } else {
             return newR.total_time < oldR.total_time;
+        }
+    }
+
+    public createEmptyRecord(userUid: string): Irecord {
+        return {
+            "userId": userUid,
+            "score": 0,
+            "level": 0,
+            "percent": 0,
+            "timestamp": new Date(),
+            "total_time": 0
         }
     }
 
