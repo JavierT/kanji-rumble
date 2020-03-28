@@ -1,21 +1,28 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Icarta } from 'app/models/carta';
+import { Icarta, StatusCard } from 'app/models/carta';
+import { trigger, state, style, transition, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-card',
   templateUrl: './card.component.html',
-  styleUrls: ['./card.component.scss']
+  styleUrls: ['./card.component.scss'],
 })
 export class CardComponent implements OnInit {
 
   @Input() title: string;
   @Input() cardData: Icarta[];
-  @Input() showSolution?: Icarta = null;
+  @Input() status: StatusCard;
   @Output() selected: EventEmitter<Icarta> = new EventEmitter<Icarta>();
+
+  public modDev = false;
 
   constructor() { }
 
   ngOnInit() {
+  }
+
+  isFlippedStatus() {
+    return this.status === StatusCard.HIDE;
   }
 
   getImgSrc(carta: Icarta) {
@@ -23,20 +30,19 @@ export class CardComponent implements OnInit {
   }
 
   selectTile(where: Icarta[], index: number) {
-    for (const tile of where) {
-      tile.selected = false;
+    if (this.status === StatusCard.PLAY) {
+      for (const tile of where) {
+        tile.selected = false;
+      }
+      where[index].selected = true;
+      this.selected.emit(where[index]);
     }
-    where[index].selected = true;
-    this.selected.emit(where[index]);
   }
 
   isShowSolutionActive(tile: Icarta): boolean {
-    if (this.showSolution === null) {
-      return false;
-    } else {
-      return this.showSolution.img === tile.img;
-    }  
-
+    if (this.status === StatusCard.SOLVE) {
+      return tile.solution;
+    }
   }
 
   

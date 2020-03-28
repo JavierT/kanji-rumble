@@ -16,7 +16,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 
 export class DataService {
   
-    firebaseUrl: string = "https://kenji-83f0d.firebaseio.com/"
+    firebaseUrl: string = "https://kanjirumble-9d2fa.firebaseio.com/"
     private _urlGameExample = './assets/data/game_example.json';
 
     public lastRecord = new Subject<Irecord>();
@@ -84,7 +84,6 @@ export class DataService {
                 return  { id: e.payload.doc.id,
                     ...e.payload.doc.data() as Irecord };
                 })
-            console.log("setting last record data")
             if(arrayRec.length > 0) {
                 this.lastRecord.next(arrayRec[0]);
             }

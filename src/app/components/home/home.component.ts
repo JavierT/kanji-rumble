@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { DataService } from 'app/services/data.service';
-import { Icarta } from 'app/models/carta';
+import { Icarta, StatusCard } from 'app/models/carta';
 import { MatSnackBar } from '@angular/material';
 import { Subscription } from 'rxjs';
 
@@ -21,6 +21,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   solved = false;
   subscription: Subscription;
 
+  status = StatusCard.HIDE;
+
   constructor(private dataService: DataService, private _snackBar: MatSnackBar) {
   }
 
@@ -36,6 +38,9 @@ export class HomeComponent implements OnInit, OnDestroy {
         }
         this.solutionTile1 = res.solution1 as Icarta;
         this.solutionTile2 = res.solution2 as Icarta;
+        setTimeout(() => {
+          this.status = StatusCard.PLAY;
+        }, 2000);
       })
   }
 
@@ -53,6 +58,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
     where[index].selected = true;
   }
+
+  doNothing(tile: Icarta): void { }
 
   private getSelected(arrayTiles: Icarta[]): Icarta {
     for (const tile of arrayTiles) {

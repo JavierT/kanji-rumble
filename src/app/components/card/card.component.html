@@ -1,27 +1,27 @@
-<mat-card class="card" *ngIf="cardData.length > 0">
+<mat-card *ngIf="cardData.length > 0">
     <mat-card-title class="title">
         {{title}}
     </mat-card-title>
     <mat-card-content>
-        <div class="flip-card">
-            <div class="flip-card-inner">
-              <div class="flip-card-front">
-                <mat-grid-list cols="3" gutterSize="20px">
-                    <mat-grid-tile *ngFor="let tile of cardData; let i = index" 
-                        class="selectable-tile"
-                        (click)="selectTile(cardData, i)">
-                        <img [src]="getImgSrc(tile)" alt="" [ngClass]="{
-                            'selectable-tile-img':true,
-                            'active-tile': tile.selected, 
-                            'highlight-error': isShowSolutionActive(tile)
-                        }">
-                    </mat-grid-tile>
-                </mat-grid-list>
-              </div> <!-- flip-card-front -->
-              <div class="flip-card-back">
-              </div>
-            </div><!-- flip-card-inner -->
-        </div><!-- flip-card -->
+        <mat-grid-list cols="3" gutterSize="20px">
+            <mat-grid-tile *ngFor="let tile of cardData; let i = index" 
+                class="selectable-tile"
+                (click)="selectTile(cardData, i)">
+                <div class="container" >
+                    <div class="flippable-card" [ngClass]="{'flipped': isFlippedStatus()}">
+                            <img class="sides front" [src]="getImgSrc(tile)" alt=""
+                            [ngClass]="{
+                                'selectable-tile-img':true,
+                                'highlight-dev': (modDev && tile.solution),
+                                'active-tile': tile.selected, 
+                                'highlight-error': isShowSolutionActive(tile)
+                            }">
+                        <div class="sides back"></div>
+                    </div>
+                </div>
+                
+            </mat-grid-tile>
+        </mat-grid-list>
     </mat-card-content>
 </mat-card>
 

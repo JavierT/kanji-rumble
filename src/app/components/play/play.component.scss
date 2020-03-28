@@ -33,6 +33,11 @@
 
     flex-direction: column;
     flex-basis: 40%;
+
+    @media (max-width: $breakpoint-mobile){
+        display: flex;
+        flex-basis: 100%;
+    }
 }
 
 .spinner {

@@ -132,9 +132,7 @@ export class AuthService {
   googleAuth() {
     return this.authLogin(new auth.GoogleAuthProvider()).then((result) => {
       const subs = this.setUserData(result.user).pipe(take(1)).subscribe(() => {
-        console.log("user data saved")
         this.ngZone.run(() => {
-          console.log("doing redirection to account")
           this.router.navigate(['account']);
         });
         

@@ -3,7 +3,6 @@ import { Subject } from 'rxjs';
 
 export class GameMechanics {
     allTiles: Map<string, string[]>;
-    solutionCard: Icarta;
     cardAData: Icarta[];
     cardBData: Icarta[];
     ready = new Subject<boolean>();
@@ -58,12 +57,13 @@ export class GameMechanics {
         // that then it's too easy to find as it is the same. I think I
         // should get a same one in another folder. 
         let randomIndex = Math.floor(Math.random() * imgsPerCard);
-        this.solutionCard = cardADataTmp[randomIndex];
+        cardADataTmp[randomIndex].solution = true;
         const new_folder = this.getFolderDifferentTo(keys, cardADataTmp[randomIndex].folder);
         cardBDataTmp.push({
             "folder": new_folder,
             "img": cardADataTmp[randomIndex].img,
             "selected": false,
+            "solution": true
         });
         // console.log('cardA: ', cardADataTmp)
         // console.log('cardB: ', cardBDataTmp)

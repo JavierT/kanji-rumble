@@ -32,7 +32,6 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   login(){
-    console.log("called login")
     this.myNav.toggle();
     this.router.navigate(['login']);
   }

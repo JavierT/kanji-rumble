@@ -33,7 +33,6 @@ export class ScoreboardComponent implements OnInit, OnDestroy {
         this.allUsers.set(e.payload.doc.id, {
               ...e.payload.doc.data() as Player });
       });
-      console.log(this.allUsers)
       this.requestRecords();
     })
   }
@@ -43,9 +42,6 @@ export class ScoreboardComponent implements OnInit, OnDestroy {
       .observe([Breakpoints.Small, Breakpoints.HandsetPortrait])
       .subscribe((state: BreakpointState) => {
         if (state.matches) {
-          console.log(
-            'Matches small viewport or handset in portrait mode'
-          );
           this.displayedColumns = ['name', 'score', 'total_time', 'timestamp'];
         }
       });

@@ -24,11 +24,12 @@ const routes: Routes = [
   { path: 'scoreboard', component: ScoreboardComponent, canActivate: [AuthGuard] },
   { path: 'game-over', component: GameOverComponent, canActivate: [AuthGuard] },
   { path: 'contact', component: ContactComponent},
-  { path: '', redirectTo: '/home', pathMatch: 'full' }
+  { path: '', redirectTo: '/home', pathMatch: 'full' },
+  {path: '**', redirectTo: '/home'}
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes,{ useHash: true })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

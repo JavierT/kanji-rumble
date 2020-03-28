@@ -22,40 +22,18 @@
             <p class="emphasis">¡A ver cómo de rápido eres capaz de encontrarla!</p>
         </div>
         <div class="two-cards">
-            <mat-card class="cards">
-                <mat-card-title>
-                    Carta 1
-                </mat-card-title>
-                <mat-card-content>
-                    <mat-grid-list cols="3" gutterSize="20px">
-                        <mat-grid-tile *ngFor="let tile of carta1ejemplo; let i = index" class="selectable-tile"
-                            (click)="selectTile(carta1ejemplo, i)">
-                            <img [src]="getImgSrc(tile)" alt="" [ngClass]="{
-                                'selectable-tile-img':true,
-                                'active-tile': tile.selected, 
-                                'solution-by-help': showSolution
-                            }">
-                        </mat-grid-tile>
-                    </mat-grid-list>
-                </mat-card-content>
-            </mat-card>
-            <mat-card class="cards">
-                <mat-card-title>
-                    Carta 2
-                </mat-card-title>
-                <mat-card-content>
-                    <mat-grid-list cols="3" gutterSize="20px">
-                        <mat-grid-tile *ngFor="let tile of carta2ejemplo; let i = index" class="selectable-tile"
-                            (click)="selectTile(carta2ejemplo, i)">
-                            <img [src]="getImgSrc(tile)" alt="" [ngClass]="{
-                                'selectable-tile-img':true,
-                                'active-tile': tile.selected, 
-                                'solution-by-help': showSolution
-                            }">
-                        </mat-grid-tile>
-                    </mat-grid-list>
-                </mat-card-content>
-            </mat-card>
+            <app-card class="card"
+                [title]="'Carta A'"
+                [cardData]='carta1ejemplo'
+                [status]='status'
+                (selected)="doNothing($event)">
+            </app-card>
+            <app-card class="card"
+            [title]="'Carta A'"
+            [cardData]='carta2ejemplo'
+            [status]='status'
+            (selected)="doNothing($event)">
+        </app-card>
         </div>
         <div *ngIf="showSolution" class="description">
             <p>La carta que es similar entre ambas es la persona...</p>

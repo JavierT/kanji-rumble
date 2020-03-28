@@ -1,4 +1,4 @@
-<div *ngIf="ready; else loading">
+<div *ngIf="ready; else loading" class="full-width">
 
 <app-ranking-table [dataset]='dataSource' [cols]='displayedColumns' [title]="'Mejores puntuaciones'"></app-ranking-table>
 <app-ranking-table [dataset]='dataSourceWeek' [cols]='displayedColumns' [title]="'Mejores puntuaciones de la semana'"></app-ranking-table>

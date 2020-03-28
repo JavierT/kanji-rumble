@@ -32,7 +32,6 @@ export class PlayerAccountComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe)).subscribe(
         (player) => {
           this.playerData = player;
-          console.log(player)
           this.dataService.getRecordByUserId(player.uid);
           this.dataService.lastRecord.pipe(takeUntil(this.unsubscribe))
             .subscribe((record) => {

@@ -32,7 +32,7 @@
         <app-card class="card"
             [title]="'Carta A'"
             [cardData]='gameMechanics.cardAData'
-            [showSolution]='sendSolutionTile'
+            [status]='statusCard'
             (selected)="checkIfSuccess($event)">
         </app-card>
         <div  class="spinner">
@@ -49,7 +49,7 @@
         <app-card class="card"
             [title]="'Carta B'"
             [cardData]='gameMechanics.cardBData'
-            [showSolution]='sendSolutionTile'
+            [status]='statusCard'
             (selected)="checkIfSuccess($event)">
         </app-card>
     </div>

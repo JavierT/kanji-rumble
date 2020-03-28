@@ -1,12 +1,13 @@
 import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { DataService } from 'app/services/data.service';
-import { Icarta } from 'app/models/carta';
+import { Icarta, StatusCard } from 'app/models/carta';
 import { MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
 import { GameMechanics } from './game-mechanics';
 import { AuthService } from 'app/services/auth.service';
 import { Irecord } from 'app/models/records.model.';
 import { Subscription } from 'rxjs';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-play',
@@ -16,6 +17,8 @@ import { Subscription } from 'rxjs';
 export class PlayComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ready = false;
+  // Used to send the solution tile to the card component
+  statusCard = StatusCard.HIDE;
   lives = [true, true, true];
   currentlives = 3;
 
@@ -27,20 +30,17 @@ export class PlayComponent implements OnInit, AfterViewInit, OnDestroy {
   spinnerValue = 100;
   diameterSpinner = 100;
   timerStep = this.spinnerValue / this.timerValue;
-  //cardAData: Icarta[] = [];
-  //cardBData: Icarta[] = [];
+
   interval: any;
-  //solutionCard: Icarta;
+
   solved: boolean;
 
   score = 0;
   total_time = 0;
 
-  // Used to send the solution tile to the card component
-  sendSolutionTile: Icarta = null;
+
   gameMechanics: GameMechanics;
   subsReady: Subscription;
-  recordSubs: Subscription;
   tilesSubs: Subscription;
 
   constructor(private dataService: DataService, private _snackBar: MatSnackBar, private router: Router, private authService: AuthService) {
@@ -49,16 +49,11 @@ export class PlayComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit() {
     
-    this.dataService.getAllTiles().subscribe(
+    this.tilesSubs = this.dataService.getAllTiles().pipe(take(1)).subscribe(
       data => {
         this.gameMechanics.setData(data);
-        this.subsReady = this.gameMechanics.ready.subscribe((res) => {
-          this.ready = res;
-          if (this.ready) {
-            this.startCountdown();
-          }
-        })
-        this.gameMechanics.createRandomCards(this.level);
+        this.subscribeReady();
+        this.createNewRound();
       });
     if (window.innerWidth < 600) {
       this.diameterSpinner = 40;
@@ -74,12 +69,29 @@ export class PlayComponent implements OnInit, AfterViewInit, OnDestroy {
   ngAfterViewInit(): void {
   }
 
-  private resetContdown(seconds: number) {
-    this.timerValue = seconds;
+  private resetContdown() {
+    this.timerValue = this.intial_timer;
     this.spinnerValue = 100;
     this.timerStep = this.spinnerValue / this.timerValue;
-    clearInterval(this.interval);
-    this.startCountdown();
+  }
+
+  private subscribeReady() {
+    this.subsReady = this.gameMechanics.ready.subscribe((res) => {
+      this.ready = res;
+      if (this.ready) {
+        setTimeout(() => {
+          this.statusCard = StatusCard.PLAY;
+          this.startCountdown();
+        }, 1000);
+      }
+    })
+  }
+
+  private createNewRound() {
+    this.statusCard = StatusCard.HIDE;
+    this.resetContdown();
+    // Ask for new cards, the subscribe will do the rest
+    this.gameMechanics.createRandomCards(this.level);
   }
 
   private startCountdown() {
@@ -109,46 +121,40 @@ export class PlayComponent implements OnInit, AfterViewInit, OnDestroy {
   }  
 
   private checkSolution(sel1: Icarta, sel2: Icarta) {
+    clearInterval(this.interval);
+    this.statusCard = StatusCard.FINISH;
     let msg = "";
     if (this.gameMechanics.isSolutionBetweenTiles(sel1, sel2)) {
       msg = "La solucion es correcta";
-      clearInterval(this.interval);
       setTimeout(() => {
         this.nextLevel();
-      }, 2000);
+      }, 1500);
 
     } else {
       msg = "La solucion no es correcta";
       this.loseALife();
     }
     this._snackBar.open(msg, 'Ok', {
-      duration: 2000,
+      duration: 1500,
     });
   }
 
-  private setSolution() {
-    // TODO user selection to red, good one to green
-    this.sendSolutionTile = this.gameMechanics.solutionCard;
-  }
 
   private loseALife() {
-    clearInterval(this.interval);
-    this.setSolution();
+    this.statusCard = StatusCard.SOLVE;
     this.currentlives -= 1;
     setTimeout(() => {
       // 3 seconds showing the result
       this.gameMechanics.clearSelected();
-      this.sendSolutionTile = null;
       this.lives[this.currentlives] = false;
-      if (this.currentlives == 0) {
+      if (this.currentlives <= 0) {
           this._snackBar.open("Has perdido", 'Ok', {
-            duration: 4000,
+            duration: 3000,
           });
           this.dataService.saveRecord(this.createRecord())
           this.router.navigate(['game-over'])
         } else {
-          this.gameMechanics.createRandomCards(this.level);
-          this.resetContdown(this.intial_timer);
+          this.createNewRound();         
         }
       }, 3500);
   }
@@ -158,8 +164,8 @@ export class PlayComponent implements OnInit, AfterViewInit, OnDestroy {
     this.correct += 1;
     if (this.correct === 3) {
       this.correct = 0;
-      if (this.level === 10) {
-        this.level = 10;
+      if (this.level === 12) {
+        this.level = 12;
         if (this.intial_timer === 10) {
           this.intial_timer = 10;
         } else {
@@ -169,24 +175,12 @@ export class PlayComponent implements OnInit, AfterViewInit, OnDestroy {
         this.level += 1
       }
     }
-    this.gameMechanics.createRandomCards(this.level);
-    this.resetContdown(this.intial_timer);
+    this.createNewRound(); 
   }
 
 
   private createRecord(): Irecord {
     const player = this.authService.userUid;
-    // if (user === null) {
-    //   this.authService.getUserData()
-    //   .subscribe(
-    //     (player) => user = player.uid, 
-    //     (error) => {
-    //       this._snackBar.open("Lo sentimos, no se ha podido guardar tu record", 'Ok', {
-    //         duration: 3000});
-    //       return null;
-    //     }
-    //   );
-    // }
     return {
       "userId": player,
       "score": this.score,
