@@ -3,6 +3,8 @@ import { DataService } from 'app/services/data.service';
 import { Icarta, StatusCard } from 'app/models/carta';
 import { MatSnackBar } from '@angular/material';
 import { Subscription } from 'rxjs';
+import { GameService } from 'app/services/game.service';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-home',
@@ -20,10 +22,11 @@ export class HomeComponent implements OnInit, OnDestroy {
   showSolution: boolean = false;
   solved = false;
   subscription: Subscription;
+  mainIfnoSubs: Subscription;
 
   status = StatusCard.HIDE;
 
-  constructor(private dataService: DataService, private _snackBar: MatSnackBar) {
+  constructor(private dataService: DataService, private _snackBar: MatSnackBar, private gameService: GameService) {
   }
 
   ngOnInit() {
@@ -42,10 +45,16 @@ export class HomeComponent implements OnInit, OnDestroy {
           this.status = StatusCard.PLAY;
         }, 2000);
       })
+
+    
+  this.mainIfnoSubs = this.dataService.getGameMainInfos().pipe(take(1)).subscribe(
+      data => this.gameService.setMainInfos(data));
+        
   }
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
+    this.mainIfnoSubs.unsubscribe();
   }
 
   getImgSrc(carta: Icarta) {

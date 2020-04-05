@@ -3,7 +3,8 @@ export interface Icarta {
     "img" : string,
     "type"?: string,
     "selected"?: boolean,
-    "solution"?: boolean
+    "solution"?: boolean,
+    "levelFolder": string,
 }
 
 export enum StatusCard {

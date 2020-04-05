@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, throwError } from 'rxjs';
 import { map, catchError, flatMap, take } from 'rxjs/operators';
 import { Icarta } from 'app/models/carta';
 import { FirebaseId } from 'app/models/fb-key';
@@ -8,6 +8,8 @@ import { MyError } from 'app/models/my-error';
 import { Irecord } from 'app/models/records.model.';
 import { Player } from 'app/models/player.model';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { GameInfo, GameLevel } from 'app/models/gameInfo';
+import { getMatFormFieldPlaceholderConflictError } from '@angular/material';
 
 
 @Injectable({
@@ -19,6 +21,7 @@ export class DataService {
     firebaseUrl: string = "https://kanjirumble-9d2fa.firebaseio.com/"
     private _urlGameExample = './assets/data/game_example.json';
 
+    // TODO pass records to game service
     public lastRecord = new Subject<Irecord>();
     public oldRecord = new Subject<Irecord>();
 
@@ -31,20 +34,28 @@ export class DataService {
     }
 
     //<Map<string, Icarta[]>
-    getAllTiles(): Observable<Map<string, string[]>>{
-        return this.http.get<object>(`${this.firebaseUrl}tiles.json`)
-            .pipe(map(responseData => {
-                let a_tiles = new Map();
-                for (const key in responseData) {
-                    if (responseData.hasOwnProperty(key)) {
-                        const element = responseData[key];
-                        a_tiles.set(key, element)
-                    }
+    getGameMainInfos(): Observable<GameInfo>{
+        return this.http.get<any>(`${this.firebaseUrl}.json`)
+            .pipe(map((responseData: any) => {
+                let gameInfo: GameInfo = {
+                    gameName: responseData.gameName,
+                    levels: [],
                 }
-                return a_tiles;
-
-                 
-            }),
+                for (const level of responseData.levels) {
+                    const levelMap = new Map<string, string[]>();
+                    for (const  folder of level.folders) {
+                        levelMap.set(folder.name, folder.images);
+                    }
+                    let gameLevel: GameLevel = {
+                        levelName: level.levelName,
+                        folderName: level.folderName,
+                        mapImagesByFolder: levelMap
+                    }
+                    gameInfo.levels.push(gameLevel)
+                }
+                return gameInfo;
+            }
+            ),
             catchError(errorRes => {
                 console.log('error: ', errorRes);
                 throw new MyError(errorRes);
@@ -128,6 +139,21 @@ export class DataService {
 
     getPlayers() {
         return this.firestore.collection('users').snapshotChanges()
+    }
+
+    updatePlayer(player: Player, difficulty: number, mode: number) {
+        const docRef  =  this.firestore.collection("users").doc(player.id);
+        const playerUpdate = {
+            "difficulty": difficulty,
+            "mode": mode
+        }
+        docRef.get().subscribe((thisDoc) => {
+            if (thisDoc.exists) {
+                docRef.update(playerUpdate);
+            } else {
+                throw new MyError("No se ha podido guardar los datos")
+            }
+        });
     }
 
     /******************************************************************************* */

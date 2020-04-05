@@ -18,7 +18,7 @@ import { HomeComponent } from './components/home/home.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { LoginComponent } from './components/auth/login/login.component';
 import { PlayComponent } from './components/play/play.component';
-import { CardComponent } from './components/card/card.component';
+import { CardComponent } from './lib-components/card/card.component';
 import { AuthService } from './services/auth.service';
 import { RegisterComponent } from './components/auth/register/register.component';
 import { ResetPasswordComponent } from './components/auth/reset-password/reset-password.component';
@@ -27,7 +27,8 @@ import { VerifyEmailComponent } from './components/auth/verify-email/verify-emai
 import { ScoreboardComponent } from './components/scoreboard/scoreboard.component';
 import { GameOverComponent } from './components/game-over/game-over.component';
 import { MinuteSecondsPipe } from './pipes/minute-seconds.pipe';
-import { RankingTableComponent } from './components/ranking-table/ranking-table.component';
+import { RankingTableComponent } from './lib-components/ranking-table/ranking-table.component';
+import { LobbyComponent } from './components/lobby/lobby.component';
 
 const firebaseConfig = {
   apiKey: "AIzaSyA4AGlXbkDg9KUwTDAX7IpLHMVjiLzViqE",
@@ -56,6 +57,7 @@ const firebaseConfig = {
     GameOverComponent,
     MinuteSecondsPipe,
     RankingTableComponent,
+    LobbyComponent,
   ],
   imports: [
     BrowserModule,

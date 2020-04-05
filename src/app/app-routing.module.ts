@@ -11,6 +11,7 @@ import { PlayerAccountComponent } from './components/player-account/player-accou
 import { ScoreboardComponent } from './components/scoreboard/scoreboard.component';
 import { GameOverComponent } from './components/game-over/game-over.component';
 import { VerifyEmailComponent } from './components/auth/verify-email/verify-email.component';
+import { LobbyComponent } from './components/lobby/lobby.component';
 
 
 const routes: Routes = [
@@ -20,6 +21,7 @@ const routes: Routes = [
   { path: 'verify-email', component: VerifyEmailComponent },
   { path: 'reset-psw', component: ResetPasswordComponent },
   { path: 'account', component: PlayerAccountComponent, canActivate: [AuthGuard] },
+  { path: 'lobby', component: LobbyComponent, canActivate: [AuthGuard] },
   { path: 'play', component: PlayComponent, canActivate: [AuthGuard] },
   { path: 'scoreboard', component: ScoreboardComponent, canActivate: [AuthGuard] },
   { path: 'game-over', component: GameOverComponent, canActivate: [AuthGuard] },

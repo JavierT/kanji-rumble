@@ -7,4 +7,6 @@ export class Player {
   displayName: string;
   photoURL: string;
   emailVerified: boolean;
+  difficulty?: number;
+  mode?: number;
 }

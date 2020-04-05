@@ -2,11 +2,8 @@
 
   <div *ngIf="playerData" class="main-content">
     <h2>Bienvenido a tu cuenta {{playerData?.displayName}}.</h2>
-
+<!-- 
     <div class="all-info">
-      <div class="user-image">
-        <img src="{{(playerData.photoURL) ? playerData.photoURL : './assets/img/dummy-user.png'}}" alt="{{playerData.displayName}}">
-      </div>
       <div class="user-info">
         <div *ngIf="!playerData.emailVerified">
           <h4>Por favor, confirma tu email</h4>
@@ -22,7 +19,24 @@
           <span>{{playerData.email}}</span>
         </div>
       </div>
-    </div>
+      <div class="user-settings">
+        <mat-form-field>
+          <mat-label>Dificultad</mat-label>
+          <select matNativeControl required [(ngModel)]="playerData?.difficulty">
+            <option value="2" disabled>Normal</option>
+            <option value="3">Dificil</option>
+          </select>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Modo de juego</mat-label>
+          <select matNativeControl required  [(ngModel)]="playerData?.mode">
+            <option value="1">Normal</option>
+            <option value="2" disabled>Memory</option>
+          </select>
+        </mat-form-field>
+        <button mat-raised-button color="primary" (click)="saveChanges()">Guardar los cambios</button>
+      </div>
+    </div> -->
 
     <div class="records">
       <h3>Tus récords personales</h3>
@@ -44,6 +58,10 @@
             <span>{{lastRecord.timestamp}}</span>
           </div> -->
       </div>
+    </div>
+
+    <div>
+      <p><a [routerLink]="[ 'lobby']">Empezar una partida</a></p>
     </div>
   </div>
 </div>

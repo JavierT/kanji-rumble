@@ -2,7 +2,7 @@
     <form #authForm='ngForm' (ngSubmit)='onSubmit(authForm)' class="main-form">
         <mat-form-field>
             <input mat-input type="username" placeholder="Nombre de usuario" matInput id="username" ngModel
-                name="username" required email />
+                name="username" required />
 
         </mat-form-field>
 
@@ -16,7 +16,7 @@
         </mat-form-field>
 
         <div class="btns-layout">
-            <button mat-raised-button type='submit' color="primary">
+            <button mat-raised-button type='submit' color="primary" [disabled]="!authForm.valid">
                 Registrarse
             </button>
         </div>
@@ -35,6 +35,9 @@
             <div class="redirectToLogin">
                 <span>¿Ya tienes cuenta? <a class="redirect" routerLink="/login">Conectate aquí</a></span>
             </div>
+        </div>
+        <div class="btns-layout">
+            <p>Tus datos serán tratados de forma anónima y privada. Solo son usados por Kanji Rumble para mantener una tabla de récords.</p>
         </div>
     </form>
 </section>

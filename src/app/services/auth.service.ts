@@ -61,7 +61,6 @@ export class AuthService {
     this.afAuth.authState.pipe(take(1)).subscribe(user => {
       if (user) {
         this.playerData = this.parseFbUsertoPlayer(user);
-        console.log(user)
         ready.next(this.playerData);
       } else {
         ready.thrownError( new MyError("Se ha producido un error al cargar los datos del jugador"))
@@ -162,7 +161,9 @@ export class AuthService {
             email: user.email,
             displayName: displayName ? displayName : user.displayName,
             photoURL: user.photoURL,
-            emailVerified: user.emailVerified
+            emailVerified: user.emailVerified,
+            difficulty: 1,
+            mode: 1,
           }
           userRef.set(playerData, {
             merge: true

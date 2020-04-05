@@ -1,0 +1,16 @@
+<div fxLayout="column">
+    <div fxFlex fxLayout="column" fxLayoutAlign="center center" class="title">
+        <h4>Elige el nivel de dificultad</h4>
+        <span class="txt-small">Los niveles N5 doblan la puntuación</span>
+    </div>
+    <mat-divider></mat-divider>
+    <div *ngFor="let level of difficultyLevels$ | async" class="list-difficulties">
+        <div fxFlex fxLayout="row" fxLayoutAlign="center center">
+
+            <button mat-raised-button (click)="play(level)" [disabled]="isThisLevelDisabled(level)">
+                <mat-icon class="icon">translate</mat-icon>
+                {{level}}
+            </button>
+        </div>
+    </div>
+</div>

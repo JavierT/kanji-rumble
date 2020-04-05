@@ -1,0 +1,89 @@
+@import '../../../variables.scss';
+
+mat-card-title {
+    text-align: center;
+    @media (max-width: $breakpoint-mobile){
+        display: none;
+    } 
+}
+// to be set up by the parent
+// .card {
+//     display: flex;
+//     flex-direction: column;
+//     flex-basis: 40%;
+
+//     @media (max-width: $breakpoint-mobile){
+//         display: flex;
+//         flex-basis: 100%;
+//     }
+// }
+
+.tile-img {
+    width: 90%;
+    height: auto;
+}
+
+.selectable-tile-img {
+    @extend .tile-img;
+    &:hover {
+        border: 5px solid lightgreen;
+        border-radius: 20px;
+    }
+}
+
+.active-tile {
+    border: 5px solid green !important;
+    border-radius: 20px;
+}
+
+.highlight-error {
+    border: 5px solid red !important;
+    border-radius: 20px;
+}
+
+.highlight-dev {
+    border: 5px solid lightblue !important;
+    border-radius: 20px;
+}
+
+.cover-all {
+    width: 100%;
+    height: 100%;
+    background-color: grey;
+}
+
+.container {
+    perspective: 1000px;
+    -webkit-perspective: 1000px;
+    transform-style: preserve-3d;
+    width: 100%;
+    height: 100%;
+}
+
+.flippable-card {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    transform-style: preserve-3d;
+    transition: transform 1s;
+}
+
+.sides {
+    backface-visibility: hidden;
+    margin: 0;
+    display: block;
+    position: absolute;
+    backface-visibility: hidden;
+}
+
+
+.flippable-card .back {
+    background-color: #a873bf !important;
+    transform: rotateY( 180deg );
+    width: 100%;
+    height: 100%;
+}
+
+.flippable-card.flipped {
+    transform: rotateY( 180deg );
+}

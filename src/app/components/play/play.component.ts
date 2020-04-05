@@ -8,6 +8,8 @@ import { AuthService } from 'app/services/auth.service';
 import { Irecord } from 'app/models/records.model.';
 import { Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
+import { Difficulty } from 'app/models/enums';
+import { GameService } from 'app/services/game.service';
 
 @Component({
   selector: 'app-play',
@@ -36,6 +38,7 @@ export class PlayComponent implements OnInit, AfterViewInit, OnDestroy {
   solved: boolean;
 
   score = 0;
+  scoreBase = 5;
   total_time = 0;
 
 
@@ -43,18 +46,16 @@ export class PlayComponent implements OnInit, AfterViewInit, OnDestroy {
   subsReady: Subscription;
   tilesSubs: Subscription;
 
-  constructor(private dataService: DataService, private _snackBar: MatSnackBar, private router: Router, private authService: AuthService) {
+  constructor(private dataService: DataService, 
+              private _snackBar: MatSnackBar,
+              private router: Router, 
+              private authService: AuthService,
+              private gameService: GameService) {
     this.gameMechanics = new GameMechanics();
    }
 
   ngOnInit() {
-    
-    this.tilesSubs = this.dataService.getAllTiles().pipe(take(1)).subscribe(
-      data => {
-        this.gameMechanics.setData(data);
-        this.subscribeReady();
-        this.createNewRound();
-      });
+    this.prepareGame();
     if (window.innerWidth < 600) {
       this.diameterSpinner = 40;
     }
@@ -62,11 +63,23 @@ export class PlayComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subsReady.unsubscribe();
-    this.tilesSubs.unsubscribe();
+    if (this.tilesSubs !== undefined) {
+      this.tilesSubs.unsubscribe();
+    }
   }
 
 
   ngAfterViewInit(): void {
+  }
+
+  private prepareGame() {
+    this.tilesSubs = this.gameService.getData().subscribe((tiles) => {
+      this.gameMechanics.setData(tiles);
+      const folderLevel = this.gameService.getDifficultyFolder();
+      this.scoreBase = folderLevel === "N5" ? 10 : 5;
+      this.subscribeReady();
+      this.createNewRound();
+    });
   }
 
   private resetContdown() {
@@ -91,7 +104,7 @@ export class PlayComponent implements OnInit, AfterViewInit, OnDestroy {
     this.statusCard = StatusCard.HIDE;
     this.resetContdown();
     // Ask for new cards, the subscribe will do the rest
-    this.gameMechanics.createRandomCards(this.level);
+    this.gameMechanics.createRandomCards(this.level, this.gameService.getDifficultyFolder());
   }
 
   private startCountdown() {
@@ -160,7 +173,7 @@ export class PlayComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private nextLevel() {
-    this.score += this.level * 5;
+    this.score += this.level * this.scoreBase;
     this.correct += 1;
     if (this.correct === 3) {
       this.correct = 0;

@@ -4,7 +4,7 @@
     </div>
     <div *ngIf="lastRecord !== null">
         <div class="item-record">
-            <label for="score">Tu puntuacion ha sido:</label>
+            <label for="score">Tu puntuación ha sido:</label>
             <span class="big-number">{{lastRecord.score}}</span>
             <span  *ngIf="diffScore !== null && diffScore !== 0"
                 [ngClass]="{'greenDiff': diffScore > 0, 'redDiff': diffScore < 0, 'greyDiff': diffScore == 0}">
@@ -20,7 +20,7 @@
             </span>
         </div>
         <div class="item-record">
-            <label for="level">Maximo nivel alcanzado:</label>
+            <label for="level">Máximo nivel alcanzado:</label>
             <span>{{lastRecord.level}}</span>
         </div>
         <!-- <div>
@@ -30,6 +30,11 @@
     <div class="btns-layout">
         <div class="">
             <span>¿Otra partida? <a class="redirect" routerLink="/play">Click aquí</a></span>
+        </div>
+    </div>
+    <div class="btns-layout">
+        <div class="">
+            <span>¿Volver a la selección de dificultad? <a class="redirect" routerLink="/lobby">Click aquí</a></span>
         </div>
     </div>
 </div>

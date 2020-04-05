@@ -32,6 +32,7 @@ export class PlayerAccountComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe)).subscribe(
         (player) => {
           this.playerData = player;
+          // todo, get mode and difficulty here from the db
           this.dataService.getRecordByUserId(player.uid);
           this.dataService.lastRecord.pipe(takeUntil(this.unsubscribe))
             .subscribe((record) => {
@@ -48,6 +49,10 @@ export class PlayerAccountComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.unsubscribe.next();
     this.unsubscribe.complete();
+  }
+
+  saveChanges() {
+    
   }
 
   tryResendEmail() {

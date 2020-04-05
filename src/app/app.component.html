@@ -13,7 +13,7 @@
           <span class="label">Mi cuenta</span>
         </a>
       
-        <a mat-list-item [routerLink]="'/play'"  (click)="sidenav.toggle()">
+        <a mat-list-item [routerLink]="'/lobby'"  (click)="sidenav.toggle()">
           <mat-icon class="icon-sidenav">play_arrow</mat-icon>
           <span class="label">Jugar</span>
         </a>
@@ -65,7 +65,7 @@
             </a>
           </ng-template>
           
-          <a *ngIf="isLoggedIn()" mat-button [routerLink]="'/play'">
+          <a *ngIf="isLoggedIn()" mat-button [routerLink]="'/lobby'">
             <mat-icon class="icon">play_arrow</mat-icon>
             <span class="label">Jugar</span>
           </a>
