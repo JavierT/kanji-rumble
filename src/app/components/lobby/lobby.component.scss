@@ -11,3 +11,19 @@
 .title {
     margin: 1em;
 }
+
+.level {
+    text-emphasis: left;
+    max-width: 300px;
+
+    .txt-small {
+        margin-top: 5px;
+        font-size: small;
+    }
+
+    button{
+        mat-icon {
+            padding-right: 1em;
+        }
+    }
+}

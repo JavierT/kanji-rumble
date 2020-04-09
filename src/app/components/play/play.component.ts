@@ -7,8 +7,6 @@ import { GameMechanics } from './game-mechanics';
 import { AuthService } from 'app/services/auth.service';
 import { Irecord } from 'app/models/records.model.';
 import { Subscription } from 'rxjs';
-import { take } from 'rxjs/operators';
-import { Difficulty } from 'app/models/enums';
 import { GameService } from 'app/services/game.service';
 
 @Component({
@@ -75,8 +73,7 @@ export class PlayComponent implements OnInit, AfterViewInit, OnDestroy {
   private prepareGame() {
     this.tilesSubs = this.gameService.getData().subscribe((tiles) => {
       this.gameMechanics.setData(tiles);
-      const folderLevel = this.gameService.getDifficultyFolder();
-      this.scoreBase = folderLevel === "N5" ? 10 : 5;
+      this.scoreBase = this.gameService.difficulty.multiplier;
       this.subscribeReady();
       this.createNewRound();
     });
@@ -104,7 +101,7 @@ export class PlayComponent implements OnInit, AfterViewInit, OnDestroy {
     this.statusCard = StatusCard.HIDE;
     this.resetContdown();
     // Ask for new cards, the subscribe will do the rest
-    this.gameMechanics.createRandomCards(this.level, this.gameService.getDifficultyFolder());
+    this.gameMechanics.createRandomCards(this.level, this.gameService.difficulty.folderName);
   }
 
   private startCountdown() {
@@ -195,12 +192,13 @@ export class PlayComponent implements OnInit, AfterViewInit, OnDestroy {
   private createRecord(): Irecord {
     const player = this.authService.userUid;
     return {
-      "userId": player,
-      "score": this.score,
-      "level" : this.level,
-      "percent": 100,
-      "timestamp": new Date(),
-      "total_time" : this.total_time
+      userId: player,
+      score: this.score,
+      level : this.level,
+      percent: 100,
+      timestamp: new Date(),
+      total_time : this.total_time,
+      mode: this.gameService.difficulty.levelName,
     }
   }
 }

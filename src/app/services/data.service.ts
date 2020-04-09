@@ -47,9 +47,11 @@ export class DataService {
                         levelMap.set(folder.name, folder.images);
                     }
                     let gameLevel: GameLevel = {
+                        levelId: Number(level.levelId),
                         levelName: level.levelName,
                         folderName: level.folderName,
-                        mapImagesByFolder: levelMap
+                        mapImagesByFolder: levelMap,
+                        multiplier: Number(level.multiplier)
                     }
                     gameInfo.levels.push(gameLevel)
                 }
@@ -133,7 +135,8 @@ export class DataService {
             "level": 0,
             "percent": 0,
             "timestamp": new Date(),
-            "total_time": 0
+            "total_time": 0,
+            "mode": "",
         }
     }
 

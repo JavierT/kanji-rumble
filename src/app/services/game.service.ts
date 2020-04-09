@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Difficulty } from 'app/models/enums';
-import { GameInfo } from 'app/models/gameInfo';
+import { GameInfo, GameLevel } from 'app/models/gameInfo';
 import { DataService } from './data.service';
 import { take, map } from 'rxjs/operators';
-import { Subject, Subscription, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -11,23 +10,18 @@ import { Subject, Subscription, Observable } from 'rxjs';
 export class GameService {
 
   _mainInfo: GameInfo;
-  _difficulty: string;
+  _difficulty: GameLevel;
 
   constructor(private dataService: DataService) {
-    this.difficulty = "Basic Complete";
+    this.difficulty = null;
    }
 
-  public set difficulty(value: string) {
+  public set difficulty(value: GameLevel) {
     this._difficulty = value;
   }
 
   public get difficulty() {
     return this._difficulty;
-  }
-
-  getDifficultyFolder(): string {
-    const level = this.getDifficultyLevel();
-    return level.folderName;
   }
 
   public hasData() {
@@ -58,8 +52,9 @@ export class GameService {
     return this.waitForData().pipe(map(ready => {
       let levels = [];
       for (const level of this._mainInfo.levels) {
-        levels.push(level.levelName);
+        levels.push(level);
       }
+      levels.sort((a, b) => a.multiplier - b.multiplier)
       return levels;
       })
     );
@@ -75,7 +70,7 @@ export class GameService {
 
   private getDifficultyLevel() {
     for (const level of this._mainInfo.levels) {
-      if (level.levelName === this._difficulty) {
+      if (level.levelId === this._difficulty.levelId) {
         return level;
       }
     }

@@ -32,6 +32,11 @@
           <th mat-header-cell *matHeaderCellDef> Num. imagenes maximo </th>
           <td mat-cell *matCellDef="let element"> {{element.level}} </td>
         </ng-container>
+
+        <ng-container matColumnDef="mode">
+          <th mat-header-cell *matHeaderCellDef> Difficultad </th>
+          <td mat-cell *matCellDef="let element"> {{element.mode}} </td>
+        </ng-container>
     
         <ng-container matColumnDef="timestamp">
             <th mat-header-cell *matHeaderCellDef> Fecha </th>

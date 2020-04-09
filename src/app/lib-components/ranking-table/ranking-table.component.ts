@@ -14,7 +14,7 @@ import { MatSort } from '@angular/material';
 export class RankingTableComponent{
   @Input() dataset: Irecord[]  = [];
   @Input() title: string = "Mejores puntuaciones";
-  @Input() cols: string[] = ['name', 'score', 'total_time', 'max_level', 'timestamp'];
+  @Input() cols: string[] = ['name', 'score', 'total_time', 'max_level', 'mode', 'timestamp'];
 
   private matSort: MatSort;
 

@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { GameService } from 'app/services/game.service';
-import { Difficulty } from 'app/models/enums';
 import { Router } from '@angular/router';
 import { Subscription, Observable } from 'rxjs';
+import { GameLevel } from 'app/models/gameInfo';
 
 @Component({
   selector: 'app-lobby',
@@ -20,13 +20,13 @@ export class LobbyComponent implements OnInit {
     this.difficultyLevels$ = this.gameService.getLevels();
   }
 
-  play(level: string) {
+  play(level: GameLevel) {
     this.gameService.difficulty = level;
     this.router.navigate(['play']);
   }
 
-  isThisLevelDisabled(level: string): boolean {
-    return level === "Original";  
+  isThisLevelDisabled(level: GameLevel): boolean {
+    return level.levelName === "Original";  
   }
 
 }

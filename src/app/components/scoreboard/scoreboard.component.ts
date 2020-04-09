@@ -19,7 +19,7 @@ export class ScoreboardComponent implements OnInit, OnDestroy {
   mediaSubs: Subscription;
   playerSubs: Subscription;
   ready = false;
-  displayedColumns: string[] = ['name', 'score', 'total_time', 'max_level', 'timestamp'];
+  displayedColumns: string[] = ['name', 'score', 'total_time', 'max_level', 'mode', 'timestamp'];
   dataSource: Irecord[] = [];
   dataSourceWeek: Irecord[] = [];
   dataSourceMonth: Irecord[] = [];
@@ -42,7 +42,7 @@ export class ScoreboardComponent implements OnInit, OnDestroy {
       .observe([Breakpoints.Small, Breakpoints.HandsetPortrait])
       .subscribe((state: BreakpointState) => {
         if (state.matches) {
-          this.displayedColumns = ['name', 'score', 'total_time', 'timestamp'];
+          this.displayedColumns = ['name', 'score', 'total_time', 'mode'];
         }
       });
   }

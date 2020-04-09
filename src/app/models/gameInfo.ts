@@ -4,7 +4,9 @@ export interface GameInfo {
 }
 
 export interface GameLevel {
+    levelId: number;
     levelName: string;
     folderName: string;
     mapImagesByFolder: Map<string, string[]>;
+    multiplier: number;
 }
