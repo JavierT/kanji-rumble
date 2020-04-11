@@ -6,10 +6,10 @@
         <div class="description">
             <p class="emphasis">¡BIEN HECHO!</p>
             <p>Ahora puedes 
-                <a [routerLink]="'/registrarte'">registrate</a> 
+                <a [routerLink]="'/registrarte'">regístrate</a> 
                  o 
                 <a [routerLink]="'/login'">entrar</a> 
-                 con tu cuenta para poder acceder a mas niveles y batir todos los
+                 con tu cuenta para poder acceder a más niveles y batir todos los
                 récords</p>
         </div>
         <div fxFlex fxLayoutAlign="center center">
@@ -29,14 +29,14 @@
                 (selected)="doNothing($event)">
             </app-card>
             <app-card class="card"
-            [title]="'Carta A'"
+            [title]="'Carta B'"
             [cardData]='carta2ejemplo'
             [status]='status'
             (selected)="doNothing($event)">
         </app-card>
         </div>
         <div *ngIf="showSolution" class="description">
-            <p>La carta que es similar entre ambas es la persona...</p>
+            <p>El significado de ese kanji es 'mano'.</p>
         </div>
         <div fxFlex fxLayoutAlign="space-between center" class="btns-container">
             <div class="btn-help" (click)="giveSolution()">
