@@ -30,6 +30,7 @@ import { MinuteSecondsPipe } from './pipes/minute-seconds.pipe';
 import { RankingTableComponent } from './lib-components/ranking-table/ranking-table.component';
 import { LobbyComponent } from './components/lobby/lobby.component';
 import { SelectProfilePictureComponent } from './lib-components/select-profile-picture/select-profile-picture.component';
+import { CheatSheetComponent } from './components/cheat-sheet/cheat-sheet.component';
 
 const firebaseConfig = {
   apiKey: "AIzaSyA4AGlXbkDg9KUwTDAX7IpLHMVjiLzViqE",
@@ -60,6 +61,7 @@ const firebaseConfig = {
     RankingTableComponent,
     LobbyComponent,
     SelectProfilePictureComponent,
+    CheatSheetComponent,
   ],
   imports: [
     BrowserModule,
