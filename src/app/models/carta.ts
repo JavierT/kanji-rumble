@@ -4,7 +4,6 @@ export interface Icarta {
     "type"?: string,
     "selected"?: boolean,
     "solution"?: boolean,
-    "levelFolder": string,
 }
 
 export enum StatusCard {

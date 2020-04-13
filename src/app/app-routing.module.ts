@@ -12,6 +12,7 @@ import { ScoreboardComponent } from './components/scoreboard/scoreboard.componen
 import { GameOverComponent } from './components/game-over/game-over.component';
 import { VerifyEmailComponent } from './components/auth/verify-email/verify-email.component';
 import { LobbyComponent } from './components/lobby/lobby.component';
+import { CheatSheetComponent } from './components/cheat-sheet/cheat-sheet.component';
 
 
 const routes: Routes = [
@@ -25,6 +26,7 @@ const routes: Routes = [
   { path: 'play', component: PlayComponent, canActivate: [AuthGuard] },
   { path: 'scoreboard', component: ScoreboardComponent, canActivate: [AuthGuard] },
   { path: 'game-over', component: GameOverComponent, canActivate: [AuthGuard] },
+  { path: 'cheat-sheet', component: CheatSheetComponent, canActivate: [AuthGuard] },
   { path: 'contact', component: ContactComponent},
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   {path: '**', redirectTo: '/home'}

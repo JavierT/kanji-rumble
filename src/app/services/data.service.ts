@@ -1,15 +1,12 @@
-import { Injectable, PlatformRef } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, Subject, throwError } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable, Subject } from 'rxjs';
 import { map, catchError, flatMap, take } from 'rxjs/operators';
-import { Icarta } from 'app/models/carta';
-import { FirebaseId } from 'app/models/fb-key';
 import { MyError } from 'app/models/my-error';
 import { Irecord } from 'app/models/records.model.';
 import { Player, PlayerUpdate } from 'app/models/player.model';
 import { AngularFirestore, DocumentChangeAction } from '@angular/fire/firestore';
 import { GameInfo, GameLevel } from 'app/models/gameInfo';
-import { getMatFormFieldPlaceholderConflictError } from '@angular/material';
 
 
 @Injectable({
@@ -108,7 +105,7 @@ export class DataService {
         const snapshotResult = this.firestore.collection("records",  
             ref => ref.where('userId', '==', record.userId).limit(1))
             .snapshotChanges()
-            .pipe(flatMap(records => records)); 
+            .pipe(flatMap((records) => records)); 
         snapshotResult.pipe(take(1)).subscribe(doc => {
             const recordRef = doc.payload.doc.ref;
             const recordDB = <Irecord>doc.payload.doc.data()

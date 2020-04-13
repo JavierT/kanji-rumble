@@ -21,6 +21,10 @@
           <mat-icon class="icon-sidenav">score</mat-icon>
           <span class="label">Puntuaciones</span>
         </a>
+        <a mat-list-item [routerLink]="'/cheat-sheet'"  (click)="sidenav.toggle()">
+          <mat-icon class="icon-sidenav">help</mat-icon>
+          <span class="label">Ayuda</span>
+        </a>
         <a mat-list-item (click)="logout()">
           <mat-icon class="icon-sidenav">exit_to_app</mat-icon>
           <span class="label">Desconectarse</span>
@@ -72,6 +76,10 @@
           <a *ngIf="isLoggedIn()" mat-button [routerLink]="'/scoreboard'">
             <mat-icon class="icon">score</mat-icon>
             <span class="label">Puntuaciones</span>
+          </a>
+          <a *ngIf="isLoggedIn()" mat-button [routerLink]="'/cheat-sheet'">
+            <mat-icon class="icon">help</mat-icon>
+            <span class="label">Ayuda</span>
           </a>
           <a *ngIf="isLoggedIn()" mat-button (click)="logout()">
             <!-- <mat-icon class="icon">contact_support</mat-icon> -->
