@@ -6,27 +6,17 @@ mat-card-title {
         display: none;
     } 
 }
-// to be set up by the parent
-// .card {
-//     display: flex;
-//     flex-direction: column;
-//     flex-basis: 40%;
-
-//     @media (max-width: $breakpoint-mobile){
-//         display: flex;
-//         flex-basis: 100%;
-//     }
-// }
 
 .tile-img {
     width: 90%;
     height: auto;
+    
 }
 
 .selectable-tile-img {
     @extend .tile-img;
     &:hover {
-        border: 5px solid lightgreen;
+        border: 3px solid lightgreen;
         border-radius: 20px;
     }
 }
@@ -34,15 +24,21 @@ mat-card-title {
 .active-tile {
     border: 5px solid green !important;
     border-radius: 20px;
+    @media (max-width: $breakpoint-mobile){
+        border-width: 3px  !important;
+    } 
 }
 
 .highlight-error {
     border: 5px solid red !important;
     border-radius: 20px;
+    @media (max-width: $breakpoint-mobile){
+        border-width: 3px  !important;
+    } 
 }
 
 .highlight-dev {
-    border: 5px solid lightblue !important;
+    border: 3px solid lightblue !important;
     border-radius: 20px;
 }
 
@@ -82,8 +78,15 @@ mat-card-title {
     transform: rotateY( 180deg );
     width: 100%;
     height: 100%;
+    display: flex;
 }
 
 .flippable-card.flipped {
     transform: rotateY( 180deg );
+}
+
+.cover-card {
+    width: 70%;
+    margin: auto;
+    align-self: center;
 }

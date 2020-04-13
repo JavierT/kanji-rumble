@@ -2,6 +2,7 @@
 //@import "custom-theme.scss";
 @import '@angular/material/prebuilt-themes/purple-green.css';
 //@include angular-material-theme($my-theme);
+@import './variables.scss';
 
 @font-face {
   font-family: 'Merienda';
@@ -18,6 +19,10 @@
 body {
     margin: 0;
     font-family: 'Merienda', sans-serif;
+    @media (max-width: $breakpoint-mobile){   
+      font-size: smaller;
+    }
+    
   }
 
 mat-card {

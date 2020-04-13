@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, PlatformRef } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, Subject, throwError } from 'rxjs';
 import { map, catchError, flatMap, take } from 'rxjs/operators';
@@ -6,8 +6,8 @@ import { Icarta } from 'app/models/carta';
 import { FirebaseId } from 'app/models/fb-key';
 import { MyError } from 'app/models/my-error';
 import { Irecord } from 'app/models/records.model.';
-import { Player } from 'app/models/player.model';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { Player, PlayerUpdate } from 'app/models/player.model';
+import { AngularFirestore, DocumentChangeAction } from '@angular/fire/firestore';
 import { GameInfo, GameLevel } from 'app/models/gameInfo';
 import { getMatFormFieldPlaceholderConflictError } from '@angular/material';
 
@@ -144,21 +144,28 @@ export class DataService {
         return this.firestore.collection('users').snapshotChanges()
     }
 
-    updatePlayer(player: Player, difficulty: number, mode: number) {
-        const docRef  =  this.firestore.collection("users").doc(player.id);
-        const playerUpdate = {
-            "difficulty": difficulty,
-            "mode": mode
-        }
+    getPlayer(uid: string) {
+        return this.firestore.collection<Player>("users").doc(uid).get();
+    }
+
+    updatePlayer(playerId: string, playerUpdate: PlayerUpdate) {
+        const update = new Subject<boolean>();
+        const docRef  =  this.firestore.collection("users").doc(playerId);
         docRef.get().subscribe((thisDoc) => {
             if (thisDoc.exists) {
-                docRef.update(playerUpdate);
+                docRef.update(playerUpdate)
+                    .then(() => update.next(true)) 
+                    .catch((error) => update.thrownError(new MyError("Error al actualizar los datos del jugador.")));
             } else {
                 throw new MyError("No se ha podido guardar los datos")
             }
         });
+        return update;
     }
 
     /******************************************************************************* */
 
+    public getAvatar(avatar: string) {
+        return  `./assets/img/avatars/${avatar}`;
+    }
 }

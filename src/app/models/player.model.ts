@@ -1,7 +1,6 @@
 import { FirebaseId } from './fb-key';
 
 export class Player {
-  id?: string; 
   uid: string;
   email: string;
   displayName: string;
@@ -10,3 +9,13 @@ export class Player {
   difficulty?: number;
   mode?: number;
 }
+
+
+export class PlayerUpdate {
+  email?: string;
+  displayName?: string;
+  photoURL?: string;
+  difficulty?: number;
+  mode?: number;
+}
+

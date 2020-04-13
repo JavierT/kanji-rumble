@@ -29,6 +29,7 @@ import { GameOverComponent } from './components/game-over/game-over.component';
 import { MinuteSecondsPipe } from './pipes/minute-seconds.pipe';
 import { RankingTableComponent } from './lib-components/ranking-table/ranking-table.component';
 import { LobbyComponent } from './components/lobby/lobby.component';
+import { SelectProfilePictureComponent } from './lib-components/select-profile-picture/select-profile-picture.component';
 
 const firebaseConfig = {
   apiKey: "AIzaSyA4AGlXbkDg9KUwTDAX7IpLHMVjiLzViqE",
@@ -58,6 +59,7 @@ const firebaseConfig = {
     MinuteSecondsPipe,
     RankingTableComponent,
     LobbyComponent,
+    SelectProfilePictureComponent,
   ],
   imports: [
     BrowserModule,
@@ -71,6 +73,9 @@ const firebaseConfig = {
     AngularFirestoreModule, // firestore
     AngularFireAuthModule, // auth
     AngularFireStorageModule, // storage,
+  ],
+  entryComponents: [
+    SelectProfilePictureComponent
   ],
   providers: [],
   bootstrap: [AppComponent]

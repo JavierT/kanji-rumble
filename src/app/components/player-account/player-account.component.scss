@@ -9,6 +9,12 @@
     margin-top: 2vw;
 }
 
+.email-warning {
+    width: 90%;
+    margin: auto;
+    margin-bottom: 1em;
+}
+
 .all-info {
     flex-direction: row;
     display: flex;
@@ -25,24 +31,30 @@
 .user-image {
     display: flex;
     flex-basis: 25%;
+    flex-direction: column;
 
     img {
-        max-width: 200px;
+        max-width: 150px;
+        @media (max-width: $breakpoint-mobile){
+            max-width: 80px;
+        }
     }
 }
 
 .user-info {
     display: flex;
     flex-basis: 40%;
-    flex-direction: column;
-    width: 80%;
+    flex-direction: row;
+    margin-left: auto;
+    align-self: center;
 }
 
 .user-settings {
     display: flex;
     flex-basis: 40%;
     flex-direction: column;
-    width: 80%;
+    margin-left: auto;
+    align-self: center;
     align-items: flex-start;
     margin-left: 10%;
 }
@@ -54,12 +66,13 @@ mat-form-field {
 
 .item-info {
     display: flex;
-    flex-direction: row;
     padding: 1em;
 
     label {
         padding-right: 0.5em;
     }
+
+    
 }
 
 .records {

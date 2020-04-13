@@ -4,7 +4,7 @@ import { AngularFireAuth } from "@angular/fire/auth";
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { Router } from "@angular/router";
 import { Player } from 'app/models/player.model';
-import { throwError, BehaviorSubject, Subject } from 'rxjs';
+import { throwError, BehaviorSubject, Subject, ReplaySubject } from 'rxjs';
 import { MyError } from 'app/models/my-error';
 import { DataService } from './data.service';
 import { Irecord } from 'app/models/records.model.';
@@ -17,7 +17,6 @@ import { take } from 'rxjs/operators';
 export class AuthService {
   playerData: Player; // Save logged in user data
 
-
   constructor(
     public afs: AngularFirestore,   // Inject Firestore service
     public afAuth: AngularFireAuth, // Inject Firebase auth service
@@ -28,40 +27,31 @@ export class AuthService {
     /* Saving user data in localstorage when 
     logged in and setting up null when logged out */
     this.afAuth.authState.pipe(take(1)).subscribe(user => {
-      if (user) {
-        this.playerData = this.parseFbUsertoPlayer(user);
-        localStorage.setItem('user', JSON.stringify(this.playerData));
-        JSON.parse(localStorage.getItem('user'));
+      if (user && user.uid !== undefined) {
+        this.saveInStorage(user);
+        //JSON.parse(localStorage.getItem('user'));
       } else {
         localStorage.setItem('user', null);
-        JSON.parse(localStorage.getItem('user'));
+        //JSON.parse(localStorage.getItem('user'));
       }
     })
   }
 
   saveInStorage(user) {
-    this.playerData = this.parseFbUsertoPlayer(user);
-    localStorage.setItem('user', JSON.stringify(this.playerData));
+    this.dataService.getPlayer(user.uid).subscribe((player) => {
+      this.playerData = player.data() as Player;
+      localStorage.setItem('user', JSON.stringify(this.playerData));
+    });
   }
 
-  parseFbUsertoPlayer(user: User): Player {
-    const player: Player = {
-      uid: user.uid,
-      email: user.email,
-      displayName: user.displayName,
-      photoURL: user.photoURL,
-      emailVerified: user.emailVerified
-    }
-    return player;
-  }
-
-
-  getUserData() {
-    const ready = new Subject<Player>();
+  getUserData(): ReplaySubject<Player> {
+    const ready = new ReplaySubject<Player>();
     this.afAuth.authState.pipe(take(1)).subscribe(user => {
       if (user) {
-        this.playerData = this.parseFbUsertoPlayer(user);
-        ready.next(this.playerData);
+        this.dataService.getPlayer(user.uid).subscribe((player) => {
+          this.playerData = player.data() as Player;
+          ready.next(this.playerData);
+        });
       } else {
         ready.thrownError( new MyError("Se ha producido un error al cargar los datos del jugador"))
       }
@@ -160,7 +150,7 @@ export class AuthService {
             uid: user.uid,
             email: user.email,
             displayName: displayName ? displayName : user.displayName,
-            photoURL: user.photoURL,
+            photoURL: "colega0.png",
             emailVerified: user.emailVerified,
             difficulty: 1,
             mode: 1,

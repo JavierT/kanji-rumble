@@ -78,6 +78,9 @@
     &:hover {
         border: 5px solid lightgreen;
         border-radius: 20px;
+        @media (max-width: $breakpoint-mobile){
+            border-width: 3px  !important;
+        } 
     }
 }
 

@@ -45,4 +45,10 @@ export class RankingTableComponent{
     return `/assets/img/${src}.png`
    }
 
+   public getAvatar(avatar: string) {
+     if (avatar !== undefined && avatar !== null) {
+       return `./assets/img/avatars/${avatar}`;
+     }
+   }
+
 }

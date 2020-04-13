@@ -19,7 +19,7 @@ export class ScoreboardComponent implements OnInit, OnDestroy {
   mediaSubs: Subscription;
   playerSubs: Subscription;
   ready = false;
-  displayedColumns: string[] = ['name', 'score', 'total_time', 'max_level', 'mode', 'timestamp'];
+  displayedColumns: string[] = ['avatar', 'name', 'score', 'total_time', 'max_level', 'mode', 'timestamp'];
   dataSource: Irecord[] = [];
   dataSourceWeek: Irecord[] = [];
   dataSourceMonth: Irecord[] = [];
@@ -42,7 +42,7 @@ export class ScoreboardComponent implements OnInit, OnDestroy {
       .observe([Breakpoints.Small, Breakpoints.HandsetPortrait])
       .subscribe((state: BreakpointState) => {
         if (state.matches) {
-          this.displayedColumns = ['name', 'score', 'total_time', 'mode'];
+          this.displayedColumns = ['avatar', 'name', 'score', 'total_time', 'mode'];
         }
       });
   }
@@ -64,20 +64,20 @@ export class ScoreboardComponent implements OnInit, OnDestroy {
       if (resRecords !== null && resRecordsWeek !== null && resRecordsMonth !== null) {
         this.dataSource =  this.sortDataSet(resRecords.map(e => {
           return  { id: e.payload.doc.id,
-            username: this.getUserName(e.payload.doc.data().userId),
+            userData: this.getUserData(e.payload.doc.data().userId),
             ...e.payload.doc.data() as Irecord };
           }
         ));
         this.dataSourceWeek = this.sortDataSet(resRecordsWeek.map(e => {
           return  { id: e.payload.doc.id,
-            username: this.getUserName(e.payload.doc.data().userId),
+            userData: this.getUserData(e.payload.doc.data().userId),
             ...e.payload.doc.data() as Irecord };
           }
         ));
         
         this.dataSourceMonth = this.sortDataSet(resRecordsMonth.map(e => {
           return  { id: e.payload.doc.id,
-            username: this.getUserName(e.payload.doc.data().userId),
+            userData: this.getUserData(e.payload.doc.data().userId),
             ...e.payload.doc.data() as Irecord };
           }
         ));
@@ -86,12 +86,18 @@ export class ScoreboardComponent implements OnInit, OnDestroy {
     });
   }
 
-  getUserName(uid) {
+  getUserData(uid): {name: string, avatar: string} {
     const player = this.allUsers.get(uid);
     if (player !== undefined) {
-      return player.displayName;
+      return {
+        name: player.displayName,
+        avatar: player.photoURL
+      };
     } else {
-      return "Tipo de incognito"
+      return  {
+        name: "Tipo de incognito",
+        avatar: null
+      };
     }
   }
 

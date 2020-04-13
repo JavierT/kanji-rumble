@@ -1,24 +1,33 @@
 <div >
 
-  <div *ngIf="playerData" class="main-content">
+  <div *ngIf="(playerData$ | async) as playerData" class="main-content">
     <h2>Bienvenido a tu cuenta {{playerData?.displayName}}.</h2>
-<!-- 
+    <div *ngIf="!playerData.emailVerified" class="email-warning">
+      <b>Por favor, confirma tu email</b><br>
+      <small>Si no te ha llegado haz <a class="redirect" (click)="tryResendEmail()">click aquí</a> para enviar otro
+        email de confirmacion</small>
+    </div>
     <div class="all-info">
       <div class="user-info">
-        <div *ngIf="!playerData.emailVerified">
-          <h4>Por favor, confirma tu email</h4>
-          <p>Si no te ha llegado haz <a class="redirect" (click)="tryResendEmail()">click aquí</a> para enviar otro
-            email de confirmacion</p>
+        <div class="user-image">
+          <div  *ngIf="playerData.photoURL !== undefined">
+           <img [src]="getAvatar(playerData.photoURL)" alt="">
+          </div>
+          <span (click)="openDialog()">Cambiar mi avatar</span>
         </div>
-        <div class="item-info">
-          <label for="username">Nombre de usuario:</label>
-          <span>{{playerData.displayName}}</span>
+        <div fxLayout="column">
+          <div class="item-info">
+            <label for="username">Nombre de usuario:</label>
+            <span>{{playerData.displayName}}</span>
+          </div>
+          <div class="item-info">
+            <label for="email">Email:</label>
+            <span>{{playerData.email}}</span>
+          </div>
         </div>
-        <div class="item-info">
-          <label for="email">Email:</label>
-          <span>{{playerData.email}}</span>
-        </div>
+        
       </div>
+      <!-- 
       <div class="user-settings">
         <mat-form-field>
           <mat-label>Dificultad</mat-label>
@@ -60,8 +69,15 @@
       </div>
     </div>
 
-    <div>
-      <p><a [routerLink]="[ 'lobby']">Empezar una partida</a></p>
-    </div>
+    
   </div>
+  <!-- <ng-template #loading>
+    <p> Cargando datos, por favor espera... </p>
+  </ng-template> -->
+  <div>
+    <p><a [routerLink]="[ 'lobby']">Empezar una partida</a></p>
+  </div>
+  
+  
+
 </div>

@@ -1,0 +1,45 @@
+@import '../../../variables.scss';
+
+.mat-dialog-actions {
+    justify-content: space-between;
+}
+
+.container-img {
+    margin: 0.5em;
+}
+
+
+.avatar {
+    width: 100%;
+    max-height: 150px;
+
+    @media (max-width: $breakpoint-mobile){   
+        width: 100%;
+        max-height: 80px;
+    }
+
+    &:hover {
+        border:solid 1px blue;
+    }
+}
+
+.selected {
+    border:solid 2px green;
+}
+
+.flex-grid-layout {
+    justify-content: center;
+    display: flex;
+    width: 700px;
+    flex-wrap: wrap;
+    flex-direction: row;
+    overflow-y: auto;
+
+    @media (max-width: $breakpoint-tablet){
+        width: 500px; 
+    }
+
+    @media (max-width: $breakpoint-mobile){
+        width: 90%;   
+    }
+}

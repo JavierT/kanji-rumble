@@ -25,6 +25,29 @@ table {
     }
 }
 
+.header-left {
+    text-align: left !important;
+}
+
+td.mat-cell:first-of-type {
+    @media (max-width: $breakpoint-mobile){
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+    }
+
+
+}
+
+.avatar {
+    display: flex;
+    justify-content: flex-start;
+    
+    img {
+        max-width: 30px;
+    }
+
+}
+
 .podiun {
     display: flex;
     justify-content: flex-start;
