@@ -1,11 +1,11 @@
 <div >
 
   <div *ngIf="(playerData$ | async) as playerData" class="main-content">
-    <h2>Bienvenido a tu cuenta {{playerData?.displayName}}.</h2>
+    <h2>Bienvenido a tu cuenta, {{playerData?.displayName}}.</h2>
     <div *ngIf="!playerData.emailVerified" class="email-warning">
       <b>Por favor, confirma tu email</b><br>
       <small>Si no te ha llegado haz <a class="redirect" (click)="tryResendEmail()">click aquí</a> para enviar otro
-        email de confirmacion</small>
+        email de confirmación</small>
     </div>
     <div class="all-info">
       <div class="user-info">
@@ -51,7 +51,7 @@
       <h3>Tus récords personales</h3>
         <div *ngIf="lastRecord !== null">
           <div class="item-record">
-              <label for="score">Tu mejor puntuacion ha sido:</label>
+              <label for="score">Tu mejor puntuación ha sido:</label>
               <span class="big-number">{{lastRecord.score}}</span>
           </div>
           <div class="item-record">
@@ -59,7 +59,7 @@
               <span  class="big-number">{{lastRecord.total_time | minuteSeconds}}</span>
           </div>
           <div class="item-record">
-              <label for="level">El maximo nivel alcanzado:</label>
+              <label for="level">El máximo nivel alcanzado:</label>
               <span>{{lastRecord.level}}</span>
           </div>
           <!-- <div class="item-record">
@@ -75,7 +75,7 @@
     <p> Cargando datos, por favor espera... </p>
   </ng-template> -->
   <div>
-    <p><a [routerLink]="[ 'lobby']">Empezar una partida</a></p>
+    <p><a [routerLink]="[ 'lobby']">Empezar una nueva partida</a></p>
   </div>
   
   
