@@ -12,12 +12,10 @@ export class RecordsService implements OnInit, OnDestroy {
     recordsObs: Observable<Irecord[]>;
 
     constructor(private dataService: DataService) {
-        console.log("on constructor records srvice")
         this.recordsSubject = new BehaviorSubject<Irecord[]>([]);
         this.recordsObs = this.recordsSubject.asObservable();
     }
     ngOnInit(): void {
-        console.log("on init records srvice")
         this.recordsSubject = new BehaviorSubject<Irecord[]>([]);
     }
     ngOnDestroy(): void {
@@ -66,7 +64,6 @@ export class RecordsService implements OnInit, OnDestroy {
               ...e.payload.doc.data() as Irecord };
             }
           ));
-        console.log("records parsed, datasource: ", dataSource)
         this.recordsSubject.next(dataSource);
     }
 

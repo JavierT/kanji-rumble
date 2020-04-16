@@ -36,9 +36,7 @@ export class PlayerAccountComponent implements OnInit, OnDestroy {
       //data: this.playerData.photoURL,
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was clos  ed', result);
-      
+    dialogRef.afterClosed().subscribe(result => {      
       if (result !== null) {
         const playerUpdate: PlayerUpdate = {
           photoURL: result
@@ -48,7 +46,6 @@ export class PlayerAccountComponent implements OnInit, OnDestroy {
             (next) => {
               const playerDataSubject = this.authService.getUserData();
               this.playerData$ = playerDataSubject.asObservable();
-              console.log("data well saved")
             },
             (error: MyError) => {
                 this._snackBar.open(error.msg, 'Ok', {
@@ -64,7 +61,6 @@ export class PlayerAccountComponent implements OnInit, OnDestroy {
     this.playerData$ = playerDataSubject.asObservable();
     playerDataSubject.pipe(takeUntil(this.unsubscribe)).subscribe(
         (player) => {
-          console.log("player: ", player)
           this.playerId = player.uid;
           this.dataService.getRecordByUserId(player.uid);
           this.dataService.lastRecord.pipe(takeUntil(this.unsubscribe))

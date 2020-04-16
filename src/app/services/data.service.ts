@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, ReplaySubject } from 'rxjs';
 import { map, catchError, flatMap, take } from 'rxjs/operators';
 import { MyError } from 'app/models/my-error';
 import { Irecord, RecordPeriod, RecordPeriodHelper } from 'app/models/records.model.';
@@ -20,8 +20,10 @@ export class DataService {
     private _urlGameExample = './assets/data/game_example.json';
 
     // TODO pass records to game service
-    public lastRecord = new Subject<Irecord>();
-    public oldRecord = new Subject<Irecord>();
+    public lastRecord = new ReplaySubject<Irecord>();
+    public lastRecordObs = this.lastRecord.asObservable();
+    public oldRecord = new ReplaySubject<Irecord>();
+    public oldRecordObs = this.oldRecord.asObservable();
 
     constructor(private http: HttpClient, private firestore: AngularFirestore) {
 
@@ -102,6 +104,7 @@ export class DataService {
     }
 
     public updateRecords(newPossibleRecord: Irecord) {
+        this.lastRecord.next(newPossibleRecord);
         this.updateAllTimeBestRecord(newPossibleRecord);
         this.updateMonthlyRecord(newPossibleRecord);
         this.updatWeeklyRecord(newPossibleRecord);
@@ -124,7 +127,7 @@ export class DataService {
             if (this.isAllTimeBetterRecord(recordDB, newPossibleRecord)) {
                 recordRef.update(newPossibleRecord);
             }
-            this.lastRecord.next(recordDB);
+            
         });
     }
 
@@ -146,7 +149,7 @@ export class DataService {
                 const recordDB = <Irecord>thisDoc.data();
                 if (this.isMonthlyBetterRecord(recordDB, newPossibleRecord)) {
                     thisDoc.ref.update(newPossibleRecord).then(
-                        (res) => {console.log("updating record ", res)}
+                        (res) => {console.log("updating record ")}
                     ).catch(
                         (res) => {console.log("ERROR updating record ", res)}
                     );
@@ -182,7 +185,7 @@ export class DataService {
                 const recordDB = <Irecord>thisDoc.data();
                 if (this.isWeeklyBetterRecord(recordDB, newPossibleRecord)) {
                     thisDoc.ref.update(newPossibleRecord).then(
-                        (res) => {console.log("updating record ", res)}
+                        (res) => {console.log("updating record ")}
                     ).catch(
                         (res) => {console.log("ERROR updating record ", res)}
                     );

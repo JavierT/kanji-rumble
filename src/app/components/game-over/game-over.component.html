@@ -2,10 +2,10 @@
     <div>
         <h2>GAME OVER</h2>
     </div>
-    <div *ngIf="lastRecord !== null">
+    <div *ngIf="(dataService.lastRecordObs | async) as record">
         <div class="item-record">
             <label for="score">Tu puntuación ha sido:</label>
-            <span class="big-number">{{lastRecord.score}}</span>
+            <span class="big-number">{{record.score}}</span>
             <span  *ngIf="diffScore !== null && diffScore !== 0"
                 [ngClass]="{'greenDiff': diffScore > 0, 'redDiff': diffScore < 0, 'greyDiff': diffScore == 0}">
                 {{diffScore}}
@@ -13,15 +13,15 @@
         </div>
         <div class="item-record">
             <label for="time">Tiempo utilizado:</label>
-            <span  class="big-number">{{lastRecord.total_time | minuteSeconds}}</span>
+            <span  class="big-number">{{record.total_time | minuteSeconds}}</span>
             <span *ngIf="diffTime !== null  && diffTime !== 0" 
-                [ngClass]="{'greenDiff': diffTime > 0, 'redDiff': diffTime < 0, 'greyDiff': diffScore == 0}">
+                [ngClass]="{'greenDiff': diffTime < 0, 'redDiff': diffTime > 0, 'greyDiff': diffScore == 0}">
                 {{diffTime | minuteSeconds}}
             </span>
         </div>
         <div class="item-record">
             <label for="level">Máximo nivel alcanzado:</label>
-            <span>{{lastRecord.level}}</span>
+            <span>{{record.level}}</span>
         </div>
         <!-- <div>
             <label for="level">Esta puntuacion te coloca en posicion:</label>

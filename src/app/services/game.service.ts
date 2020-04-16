@@ -10,18 +10,35 @@ import { Observable } from 'rxjs';
 export class GameService {
 
   _mainInfo: GameInfo;
-  _difficulty: GameLevel;
+  _difficulty: GameLevel = null;
 
   constructor(private dataService: DataService) {
-    this.difficulty = null;
    }
 
   public set difficulty(value: GameLevel) {
+    if(value === null || value === undefined) {
+      return;
+    }
     this._difficulty = value;
+    localStorage.setItem('difficulty', JSON.stringify(
+      {
+        multiplier: value.multiplier,
+        levelId: value.levelId,
+        levelName: value.levelName
+      }
+    ));
   }
 
   public get difficulty() {
-    return this._difficulty;
+    if (this._difficulty !== null) {
+      return this._difficulty;
+    } else {
+      const diff = JSON.parse(localStorage.getItem('difficulty'));
+      if (diff !== null) {
+        this._difficulty = diff;
+      }
+      return diff
+    }
   }
 
   public hasData() {
@@ -69,9 +86,9 @@ export class GameService {
   }
 
   private getDifficultyLevel() {
-    if(this._difficulty !== null) {
+    if(this.difficulty !== null) {
       for (const level of this._mainInfo.levels) {
-        if (level.levelId === this._difficulty.levelId) {
+        if (level.levelId === this.difficulty.levelId) {
           return level;
         }
       }
