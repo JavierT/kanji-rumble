@@ -14,7 +14,7 @@ export class GameMechanics {
         this.allTiles = tiles;
     }
 
-    public createRandomCards(imgsPerCard: number, levelFolder: string) {
+    public createRandomCards(imgsPerCard: number) {
         /**
          * Problems detected> 
          *  - I can select the same cart twice
@@ -44,7 +44,6 @@ export class GameMechanics {
                     "folder": pickedKey,
                     "img": img,
                     "selected": false,
-                    "levelFolder": levelFolder,
                 });
             } else {
                 i--;
@@ -62,7 +61,6 @@ export class GameMechanics {
         const new_folder = this.getFolderDifferentTo(keys, cardADataTmp[randomIndex].folder);
         cardBDataTmp.push({
             "folder": new_folder,
-            "levelFolder": levelFolder,
             "img": cardADataTmp[randomIndex].img,
             "selected": false,
             "solution": true

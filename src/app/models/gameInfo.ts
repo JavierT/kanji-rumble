@@ -1,6 +1,6 @@
 export interface GameInfo {
     gameName: string;
-    levels: GameLevel[]
+    levels: GameLevel[];
 }
 
 export interface GameLevel {

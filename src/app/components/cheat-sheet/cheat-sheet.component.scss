@@ -1,0 +1,39 @@
+@import '../../../variables.scss';
+
+table {
+    width: 90%;
+    margin: auto;
+    margin-bottom: 1em;
+
+    @media (max-width: $breakpoint-mobile){
+        width: 95%;
+    }
+
+    th {
+        text-align: center !important;
+    }
+}
+
+.mat-paginator {
+    width: 90%;
+    margin: auto;
+    @media (max-width: $breakpoint-mobile){
+        width: 95%;
+    }
+    margin-bottom: 1em;
+}
+
+.cheatsheet-img {
+    display: flex;
+    justify-content: center;
+
+    img {
+        max-width: 80px;
+        margin: 10px;
+
+        @media (max-width: $breakpoint-mobile){
+            max-width: 40px;
+            margin: 5px;
+        }
+    }
+}

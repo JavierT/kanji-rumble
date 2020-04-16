@@ -86,10 +86,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     if (sel1 === null || sel2 === null) {
       msg = "Te has olvidado de seleccionar una imagen";
     } else {
-      const firstCardSol = this.compareTiles(sel1, this.solutionTile1);
-      const secCardSol = this.compareTiles(sel2, this.solutionTile2);
-
-      if (firstCardSol && secCardSol) {
+      if (sel1.img === sel2.img) {
         msg = "La solucion es correcta";
         setTimeout(() => {
           this.solved = true;
@@ -106,14 +103,14 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   public giveSolution() {
     for (const tile of this.carta1ejemplo) {
-      if (this.compareTiles(tile, this.solutionTile1)) {
+      if (tile.img  === this.solutionTile1.img) {
         tile.selected = true;
       } else {
         tile.selected = false;
       }
     }
     for (const tile of this.carta2ejemplo) {
-      if (this.compareTiles(tile, this.solutionTile2)) {
+      if (tile.img  === this.solutionTile2.img) {
         tile.selected = true;
       } else {
         tile.selected = false;
@@ -126,10 +123,6 @@ export class HomeComponent implements OnInit, OnDestroy {
         duration: 2000,
       });
     }, 15000);
-  }
-
-  private compareTiles(tile1: Icarta, tile2: Icarta) {
-    return tile1.img === tile2.img;
   }
 
   private clearSelected() {
