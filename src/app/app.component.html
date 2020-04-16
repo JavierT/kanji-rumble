@@ -4,7 +4,7 @@
     <mat-nav-list>
       <a mat-list-item [routerLink]="'/'"  (click)="sidenav.toggle()">
         <mat-icon class="icon-sidenav">home</mat-icon>
-        <span class="label">Accueil</span>
+        <span class="label">Portada</span>
       </a>
 
       <div *ngIf="isLoggedIn()">
@@ -38,7 +38,7 @@
       </div>
       <mat-list-item (click)="sidenav.toggle()">
         <mat-icon class="icon-sidenav">close</mat-icon>
-        <span class="label">Fermer</span>
+        <span class="label">Cerrar</span>
       </mat-list-item>
     </mat-nav-list>
   </mat-sidenav>
@@ -55,7 +55,7 @@
         <div fxShow="true" fxHide.lt-md="true" class="menu" fxFlexAlign="center">
           <a mat-button [routerLink]="'/'">
             <mat-icon class="icon">home</mat-icon>
-            <span class="label">Accueil</span>
+            <span class="label">Portada</span>
           </a>
           <a *ngIf="isLoggedIn(); else noLoggedIn" 
             mat-button [routerLink]="'/account'">
