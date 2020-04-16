@@ -161,7 +161,7 @@ export class PlayComponent implements OnInit, AfterViewInit, OnDestroy {
           this._snackBar.open("Has perdido", 'Ok', {
             duration: 3000,
           });
-          this.dataService.saveRecord(this.createRecord())
+          this.dataService.updateRecords(this.createRecord())
           this.router.navigate(['game-over'])
         } else {
           this.createNewRound();         
@@ -188,7 +188,6 @@ export class PlayComponent implements OnInit, AfterViewInit, OnDestroy {
     this.createNewRound(); 
   }
 
-
   private createRecord(): Irecord {
     const player = this.authService.userUid;
     return {
@@ -201,4 +200,5 @@ export class PlayComponent implements OnInit, AfterViewInit, OnDestroy {
       mode: this.gameService.difficulty.levelName,
     }
   }
+ 
 }

@@ -1,40 +1,23 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { DataService } from 'app/services/data.service';
-import { Irecord } from 'app/models/records.model.';
-import { Player } from 'app/models/player.model';
-import { forkJoin, combineLatest, pipe, Subject, Subscription } from 'rxjs';
-import { MediaObserver, MediaChange } from '@angular/flex-layout';
+import { Subscription } from 'rxjs';
 import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout';
-import { takeUntil } from 'rxjs/operators';
+import { RecordPeriod } from 'app/models/records.model.';
 
 @Component({
   selector: 'app-scoreboard',
   templateUrl: './scoreboard.component.html',
-  styleUrls: ['./scoreboard.component.scss']
+  styleUrls: ['./scoreboard.component.scss'],
+  //providers: [RecordsService],
 })
 export class ScoreboardComponent implements OnInit, OnDestroy {
 
-  allUsers: Map<string, Player>;
-  subs: Subscription;
   mediaSubs: Subscription;
-  playerSubs: Subscription;
-  ready = false;
   displayedColumns: string[] = ['avatar', 'name', 'score', 'total_time', 'max_level', 'mode', 'timestamp'];
-  dataSource: Irecord[] = [];
-  dataSourceWeek: Irecord[] = [];
-  dataSourceMonth: Irecord[] = [];
+  public enumRecordPeriod = RecordPeriod;
 
-  constructor(private dataService: DataService, public breakpointObserver: BreakpointObserver) { }
+  constructor(public breakpointObserver: BreakpointObserver) { }
 
   ngOnInit() {
-    this.allUsers = new Map<string, Player>();
-    this.playerSubs = this.dataService.getPlayers().subscribe((resPlayers) => {
-      resPlayers.map(e => {
-        this.allUsers.set(e.payload.doc.id, {
-              ...e.payload.doc.data() as Player });
-      });
-      this.requestRecords();
-    })
   }
 
   ngAfterContentInit() {
@@ -47,61 +30,10 @@ export class ScoreboardComponent implements OnInit, OnDestroy {
       });
   }
 
+
   ngOnDestroy(): void {
-    this.subs.unsubscribe();
     this.mediaSubs.unsubscribe();
-    this.playerSubs.unsubscribe();
   }
 
-  requestRecords() {
-    const d = new Date();
-    const day = d.getDay();
-    const weekDate = new Date(d.getFullYear(), d.getMonth(), d.getDate() + (day == 0?-6:1)-day);
-    const monthDate = new Date(d.getFullYear(), d.getMonth(), 1);
-    this.subs = combineLatest(this.dataService.getTenBestRecords(), 
-    this.dataService.getTenLastRecordsFilterByDate(weekDate), this.dataService.getTenLastRecordsFilterByDate(monthDate))
-    .subscribe(([resRecords, resRecordsWeek, resRecordsMonth]) => {
-      if (resRecords !== null && resRecordsWeek !== null && resRecordsMonth !== null) {
-        this.dataSource =  this.sortDataSet(resRecords.map(e => {
-          return  { id: e.payload.doc.id,
-            userData: this.getUserData(e.payload.doc.data().userId),
-            ...e.payload.doc.data() as Irecord };
-          }
-        ));
-        this.dataSourceWeek = this.sortDataSet(resRecordsWeek.map(e => {
-          return  { id: e.payload.doc.id,
-            userData: this.getUserData(e.payload.doc.data().userId),
-            ...e.payload.doc.data() as Irecord };
-          }
-        ));
-        
-        this.dataSourceMonth = this.sortDataSet(resRecordsMonth.map(e => {
-          return  { id: e.payload.doc.id,
-            userData: this.getUserData(e.payload.doc.data().userId),
-            ...e.payload.doc.data() as Irecord };
-          }
-        ));
-        this.ready = true;
-      }
-    });
-  }
-
-  getUserData(uid): {name: string, avatar: string} {
-    const player = this.allUsers.get(uid);
-    if (player !== undefined) {
-      return {
-        name: player.displayName,
-        avatar: player.photoURL
-      };
-    } else {
-      return  {
-        name: "Tipo de incognito",
-        avatar: null
-      };
-    }
-  }
-
-  sortDataSet(dataSet: Irecord[]) {
-    return dataSet.sort((a, b) => b.score - a.score);
-  }
+  
 }

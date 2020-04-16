@@ -3,10 +3,11 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
 import { map, catchError, flatMap, take } from 'rxjs/operators';
 import { MyError } from 'app/models/my-error';
-import { Irecord } from 'app/models/records.model.';
+import { Irecord, RecordPeriod, RecordPeriodHelper } from 'app/models/records.model.';
 import { Player, PlayerUpdate } from 'app/models/player.model';
 import { AngularFirestore, DocumentChangeAction } from '@angular/fire/firestore';
 import { GameInfo, GameLevel } from 'app/models/gameInfo';
+import { Tools } from 'app/tools';
 
 
 @Injectable({
@@ -61,22 +62,22 @@ export class DataService {
             })
         );
     }
-    /************************ NEWS *************************************************/
+    /************************ Records *************************************************/
     createRecord(record: Irecord){
         this.lastRecord.next(record);
         return this.firestore.collection('records').add(record);
     }
 
-    getTenBestRecords() {
-        return this.firestore.collection<Irecord>('records', 
-        ref => ref.orderBy('timestamp', 'desc')
-        .limit(10)).snapshotChanges()
+    getRecords(period: RecordPeriod, limit?: number) {
+        return this.firestore.collection<Irecord>(RecordPeriodHelper.getDatabaseRecordsTable(period), 
+        ref => ref.orderBy('score', 'desc')
+        ).snapshotChanges()   //.limit(limit)
     }
 
-    getTenLastRecordsFilterByDate(beginningDateObject: Date) {
-        return this.firestore.collection<Irecord>('records', 
+    getRecordsFilterByDate(period: RecordPeriod, beginningDateObject: Date) {
+        return this.firestore.collection<Irecord>(RecordPeriodHelper.getDatabaseRecordsTable(period), 
         ref => ref.where('timestamp', '>', beginningDateObject).orderBy('timestamp', 'desc')//.orderBy('score', 'desc')
-        .limit(10)).snapshotChanges()
+        ).snapshotChanges() //.limit(10)
     }
 
     /**
@@ -99,31 +100,113 @@ export class DataService {
             }
         });
     }
-    
 
-    saveRecord(record: Irecord) {
+    public updateRecords(newPossibleRecord: Irecord) {
+        this.updateAllTimeBestRecord(newPossibleRecord);
+        this.updateMonthlyRecord(newPossibleRecord);
+        this.updatWeeklyRecord(newPossibleRecord);
+    }
+    
+    /**
+     * Recovers the record of the dabase and updates it if needed
+     * @param record: Record just achieved
+     */
+    updateAllTimeBestRecord(newPossibleRecord: Irecord) {
         const snapshotResult = this.firestore.collection("records",  
-            ref => ref.where('userId', '==', record.userId).limit(1))
+            ref => ref.where('userId', '==', newPossibleRecord.userId).limit(1))
             .snapshotChanges()
             .pipe(flatMap((records) => records)); 
         snapshotResult.pipe(take(1)).subscribe(doc => {
             const recordRef = doc.payload.doc.ref;
             const recordDB = <Irecord>doc.payload.doc.data()
             this.oldRecord.next(recordDB);
-            if (this.isBetterRecord(recordDB, record)) {
-                recordRef.update(record);
+            // We have the dabatase record
+            if (this.isAllTimeBetterRecord(recordDB, newPossibleRecord)) {
+                recordRef.update(newPossibleRecord);
             }
-            this.lastRecord.next(record);
+            this.lastRecord.next(recordDB);
         });
     }
 
-    private isBetterRecord(oldR: Irecord, newR: Irecord) {
-        if (oldR.score !== newR.score) {
-            return newR.score > oldR.score;
-        } else {
-            return newR.total_time < oldR.total_time;
+    private isAllTimeBetterRecord(oldR: Irecord, newPossibleRecord: Irecord) {
+        if (oldR.score < newPossibleRecord.score) {
+            return true;
         }
+        return false;
     }
+
+     /**
+     * Recovers the record of the month the dabase and updates it if needed
+     * @param record: Record just achieved
+     */
+    updateMonthlyRecord(newPossibleRecord: Irecord) {
+        const docRef  =  this.firestore.collection("monthlyRecords").doc(newPossibleRecord.userId);
+        docRef.get().pipe(take(1)).subscribe((thisDoc) => {
+            if (thisDoc.exists) {
+                const recordDB = <Irecord>thisDoc.data();
+                if (this.isMonthlyBetterRecord(recordDB, newPossibleRecord)) {
+                    thisDoc.ref.update(newPossibleRecord).then(
+                        (res) => {console.log("updating record ", res)}
+                    ).catch(
+                        (res) => {console.log("ERROR updating record ", res)}
+                    );
+                }   
+            } else {
+                // Create
+                thisDoc.ref.set(newPossibleRecord);
+            }
+        });
+    }
+
+    private isMonthlyBetterRecord(oldR: Irecord, newPossibleRecord: Irecord) {
+        const dateToday = new Date();
+        const dateOldRecord = oldR.timestamp.toDate();
+        const isThisMonth = dateToday.getMonth() === dateOldRecord.getMonth();
+        if (!isThisMonth) {
+            return true
+        }
+        if (oldR.score < newPossibleRecord.score) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Recovers the record of the month the dabase and updates it if needed
+     * @param record: Record just achieved
+     */
+    updatWeeklyRecord(newPossibleRecord: Irecord) {
+        const docRef  =  this.firestore.collection("weeklyRecords").doc(newPossibleRecord.userId);
+        docRef.get().pipe(take(1)).subscribe((thisDoc) => {
+            if (thisDoc.exists) {
+                const recordDB = <Irecord>thisDoc.data();
+                if (this.isWeeklyBetterRecord(recordDB, newPossibleRecord)) {
+                    thisDoc.ref.update(newPossibleRecord).then(
+                        (res) => {console.log("updating record ", res)}
+                    ).catch(
+                        (res) => {console.log("ERROR updating record ", res)}
+                    );
+                }   
+            } else {
+                // Create
+                thisDoc.ref.set(newPossibleRecord);
+            }
+        });
+    }
+
+    private isWeeklyBetterRecord(oldR: Irecord, newPossibleRecord: Irecord) {
+        const dateToday = new Date();
+        const dateOldRecord = oldR.timestamp.toDate();
+        const isThisWeek = Tools.getWeek(dateToday) === Tools.getWeek(dateOldRecord);
+        if (!isThisWeek) {
+            return true
+        }
+        if (oldR.score < newPossibleRecord.score) {
+            return true;
+        }
+        return false;
+    }
+    
 
     public createEmptyRecord(userUid: string): Irecord {
         return {
@@ -137,6 +220,7 @@ export class DataService {
         }
     }
 
+    /************* Players ***************************************/
     getPlayers() {
         return this.firestore.collection('users').snapshotChanges()
     }

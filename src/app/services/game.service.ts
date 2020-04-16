@@ -69,9 +69,11 @@ export class GameService {
   }
 
   private getDifficultyLevel() {
-    for (const level of this._mainInfo.levels) {
-      if (level.levelId === this._difficulty.levelId) {
-        return level;
+    if(this._difficulty !== null) {
+      for (const level of this._mainInfo.levels) {
+        if (level.levelId === this._difficulty.levelId) {
+          return level;
+        }
       }
     }
     return this._mainInfo.levels[0];
