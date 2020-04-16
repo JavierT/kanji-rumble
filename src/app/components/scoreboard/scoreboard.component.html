@@ -1,12 +1,19 @@
-<div *ngIf="ready; else loading" class="full-width">
 
-<app-ranking-table [dataset]='dataSource' [cols]='displayedColumns' [title]="'Mejores puntuaciones'"></app-ranking-table>
-<app-ranking-table [dataset]='dataSourceWeek' [cols]='displayedColumns' [title]="'Mejores puntuaciones de la semana'"></app-ranking-table>
-<app-ranking-table [dataset]='dataSourceMonth' [cols]='displayedColumns' [title]="'Mejores puntuaciones del mes'"></app-ranking-table>
+<mat-tab-group>
+    <mat-tab label="General">
+      <ng-template matTabContent>
+        <app-ranking-table [data]='enumRecordPeriod.ALL' [cols]='displayedColumns' [title]="'Mejores puntuaciones'"></app-ranking-table>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Mensual">
+      <ng-template matTabContent>
+        <app-ranking-table [data]='enumRecordPeriod.MONTHLY' [cols]='displayedColumns' [title]="'Mejores puntuaciones del mes'"></app-ranking-table>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Semanal">
+        <ng-template matTabContent>
+            <app-ranking-table [data]='enumRecordPeriod.WEEKLY' [cols]='displayedColumns' [title]="'Mejores puntuaciones de la semana'"></app-ranking-table>
+        </ng-template>
+      </mat-tab>
+  </mat-tab-group>
 
-</div>
-<ng-template #loading>
-    <div fxFlex fxLayoutAlign="center center">
-        <mat-spinner></mat-spinner>
-    </div>
-</ng-template>

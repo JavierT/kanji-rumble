@@ -31,6 +31,9 @@ import { RankingTableComponent } from './lib-components/ranking-table/ranking-ta
 import { LobbyComponent } from './components/lobby/lobby.component';
 import { SelectProfilePictureComponent } from './lib-components/select-profile-picture/select-profile-picture.component';
 import { CheatSheetComponent } from './components/cheat-sheet/cheat-sheet.component';
+import { DataLoaderComponent } from './lib-components/data-loader/data-loader.component';
+import { LoaderService } from './services/loader.service';
+import { LoaderInterceptor } from './services/loader.interceptor';
 
 const firebaseConfig = {
   apiKey: "AIzaSyA4AGlXbkDg9KUwTDAX7IpLHMVjiLzViqE",
@@ -62,6 +65,7 @@ const firebaseConfig = {
     LobbyComponent,
     SelectProfilePictureComponent,
     CheatSheetComponent,
+    DataLoaderComponent,
   ],
   imports: [
     BrowserModule,
@@ -79,7 +83,9 @@ const firebaseConfig = {
   entryComponents: [
     SelectProfilePictureComponent
   ],
-  providers: [],
+  providers: [
+    LoaderService,
+    { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

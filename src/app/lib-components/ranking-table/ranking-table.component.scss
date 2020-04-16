@@ -24,6 +24,13 @@ table {
         width: 100%;
     }
 }
+.mat-paginator {
+    width: 90%;
+    margin: 0 auto;
+    @media (max-width: $breakpoint-mobile){
+        width: 100%;
+    }   
+}
 
 .header-left {
     text-align: left !important;
