@@ -17,7 +17,7 @@ export class GameOverComponent implements OnInit, OnDestroy {
   oldRecordSub: Subscription;
   lastRecordSub: Subscription;
 
-  constructor(private dataService: DataService, private router: Router) { }
+  constructor(public dataService: DataService, private router: Router) { }
 
   ngOnInit() {
     this.oldRecordSub = this.dataService.oldRecordObs.subscribe((record) => {

@@ -59,9 +59,13 @@ td.mat-cell:first-of-type {
     display: flex;
     justify-content: flex-start;
     
+    
     img {
         max-width: 20px;
         margin-right: 5px;
+        align-self: center;
+        height: 100%;
+        display: flex;
     }
 
     label {

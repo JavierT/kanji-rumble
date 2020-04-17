@@ -78,6 +78,9 @@ mat-form-field {
 
 .records {
     align-self: flex-start;
+    display: flex;
+    flex-direction: column;
+    flex-basis: 40%;
     margin-left: 10%;
     @media (max-width: $breakpoint-mobile){
         margin-left: auto;

@@ -12,6 +12,7 @@ export class Player {
 
 
 export class PlayerUpdate {
+  emailVerified?: boolean;
   email?: string;
   displayName?: string;
   photoURL?: string;

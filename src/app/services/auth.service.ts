@@ -16,6 +16,7 @@ import { take } from 'rxjs/operators';
 
 export class AuthService {
   playerData: Player; // Save logged in user data
+  guestMode = false;
 
   constructor(
     public afs: AngularFirestore,   // Inject Firestore service
@@ -29,10 +30,8 @@ export class AuthService {
     this.afAuth.authState.pipe(take(1)).subscribe(user => {
       if (user && user.uid !== undefined) {
         this.saveInStorage(user);
-        //JSON.parse(localStorage.getItem('user'));
       } else {
         localStorage.setItem('user', null);
-        //JSON.parse(localStorage.getItem('user'));
       }
     })
   }
@@ -50,6 +49,14 @@ export class AuthService {
       if (user) {
         this.dataService.getPlayer(user.uid).subscribe((player) => {
           this.playerData = player.data() as Player;
+          // If the email has been verified, we update the database
+          if (this.playerData.emailVerified !== user.emailVerified) {
+            this.dataService.updatePlayer(player.id, {emailVerified: user.emailVerified})
+              .pipe(take(1)).subscribe((res) => {
+                this.playerData.emailVerified = user.emailVerified;
+                ready.next(this.playerData);
+              });
+          }
           ready.next(this.playerData);
         });
       } else {
@@ -117,9 +124,14 @@ export class AuthService {
     return (user !== null) ? user.uid : null;
   }
 
-//   // Sign in with Google
+  // Sign in with Google
   googleAuth() {
-    return this.authLogin(new auth.GoogleAuthProvider()).then((result) => {
+    return this.authLogin(new auth.GoogleAuthProvider())
+  }
+
+  // Auth logic to run auth providers
+  authLogin(provider) {
+    return this.afAuth.auth.signInWithPopup(provider).then((result) => {
       const subs = this.setUserData(result.user).pipe(take(1)).subscribe(() => {
         this.ngZone.run(() => {
           this.router.navigate(['account']);
@@ -127,14 +139,8 @@ export class AuthService {
         
       });
     }).catch((error) => {
-      console.log(error)
-      throw new MyError("Autentificacion con Google fallida");
-    });
-  }
-
-  // Auth logic to run auth providers
-  authLogin(provider) {
-    return this.afAuth.auth.signInWithPopup(provider);
+      window.alert(error)
+    })
   }
 
   /* Setting up user data when sign in with username/password, 

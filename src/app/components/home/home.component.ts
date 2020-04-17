@@ -5,6 +5,7 @@ import { MatSnackBar } from '@angular/material';
 import { Subscription } from 'rxjs';
 import { GameService } from 'app/services/game.service';
 import { take } from 'rxjs/operators';
+import { AuthService } from 'app/services/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -26,10 +27,17 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   status = StatusCard.HIDE;
 
-  constructor(private dataService: DataService, private _snackBar: MatSnackBar, private gameService: GameService) {
+  constructor(
+    private dataService: DataService, 
+    private _snackBar: MatSnackBar, 
+    private gameService: GameService,
+    private authService: AuthService) {
   }
 
   ngOnInit() {
+    // If we are in guest mode, we show him the go to register info. 
+    this.solved = this.authService.guestMode ? true : false;
+    this.authService.guestMode = false;
     this.subscription = this.dataService.getCardExample()
       .subscribe((res) => {
 

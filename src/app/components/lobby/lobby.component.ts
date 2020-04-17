@@ -3,6 +3,7 @@ import { GameService } from 'app/services/game.service';
 import { Router } from '@angular/router';
 import { Subscription, Observable } from 'rxjs';
 import { GameLevel } from 'app/models/gameInfo';
+import { AuthService } from 'app/services/auth.service';
 
 @Component({
   selector: 'app-lobby',
@@ -14,7 +15,10 @@ export class LobbyComponent implements OnInit {
   subs: Subscription;
   difficultyLevels$: Observable<String[]>
 
-  constructor(private gameService: GameService, private router: Router) { }
+  constructor(
+    private gameService: GameService, 
+    private router: Router,
+    private authService: AuthService) { }
 
   ngOnInit() {
     this.difficultyLevels$ = this.gameService.getLevels();
@@ -25,8 +29,11 @@ export class LobbyComponent implements OnInit {
     this.router.navigate(['play']);
   }
 
-  isThisLevelDisabled(level: GameLevel): boolean {
-    return level.levelName === "Original";  
+  isThisLevelDisabled(level: GameLevel): boolean {    
+    if (this.authService.guestMode) {
+      return level.levelId >= 2;
+    };
+    return false;
   }
 
 }

@@ -17,12 +17,12 @@
     </div>
   </form>
   <div  class="main-form">
-    <!-- <div class="btns-layout">
+    <div class="btns-layout">
       <button mat-raised-button (click)="tryGoogleAuth()">
         <mat-icon class="icon">how_to_reg</mat-icon>
         Entrar con la cuenta de Google
       </button>
-    </div> -->
+    </div>
     
     <div class="btns-layout">
       <a routerLink="/reset-psw">He olvidado mi contraseña </a>
@@ -31,8 +31,19 @@
       <div class="redirectToLogin">
           <span>¿Aún no tienes cuenta? <a class="redirect" routerLink="/register">Regístrate aquí</a></span>
       </div>
-  </div>
+    </div>
   </div>
 
-  
+  <div class="main-form">
+    <div class="btns-layout">
+      <div class=" flex-col">
+    <button mat-raised-button (click)="guestMode()">
+      <mat-icon class="icon">how_to_reg</mat-icon>
+      Entrar como invitado
+    </button>
+    <small>Tus puntuaciones no se guardarán y no estarán disponible todos los modos de juego
+    </small></div>
+    </div>
+  </div>
+
 </section>

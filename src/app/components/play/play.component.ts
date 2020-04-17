@@ -161,8 +161,12 @@ export class PlayComponent implements OnInit, AfterViewInit, OnDestroy {
           this._snackBar.open("Has perdido", 'Ok', {
             duration: 3000,
           });
-          this.dataService.updateRecords(this.createRecord())
-          this.router.navigate(['game-over'])
+          if (this.authService.guestMode) {
+            this.router.navigate(['home'])
+          } else {
+            this.dataService.updateRecords(this.createRecord())
+            this.router.navigate(['game-over'])
+          }
         } else {
           this.createNewRound();         
         }
