@@ -25,7 +25,7 @@ export class CardComponent implements OnInit {
   }
 
   getImgSrc(carta: Icarta) {
-    return `./assets/data/tiles/${carta.folder}/${carta.img}.jpg`;
+    return `./assets/data/${carta.gameFolder}/${carta.folder}/${carta.img}.jpg`;
   }
 
   selectTile(where: Icarta[], index: number) {

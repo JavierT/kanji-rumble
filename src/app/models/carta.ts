@@ -1,5 +1,6 @@
 export interface Icarta {
     "folder": string,
+    "gameFolder": string,
     "img" : string,
     "type"?: string,
     "selected"?: boolean,

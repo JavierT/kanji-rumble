@@ -65,13 +65,13 @@ export class GameService {
     });
   }
 
-  getLevels(): Observable<String[]> {
+  getLevels(): Observable<GameLevel[]> {
     return this.waitForData().pipe(map(ready => {
       let levels = [];
       for (const level of this._mainInfo.levels) {
         levels.push(level);
       }
-      levels.sort((a, b) => a.multiplier - b.multiplier)
+      levels.sort((a, b) => a.levelId - b.levelId)
       return levels;
       })
     );

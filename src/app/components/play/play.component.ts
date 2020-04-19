@@ -101,7 +101,7 @@ export class PlayComponent implements OnInit, AfterViewInit, OnDestroy {
     this.statusCard = StatusCard.HIDE;
     this.resetContdown();
     // Ask for new cards, the subscribe will do the rest
-    this.gameMechanics.createRandomCards(this.level);
+    this.gameMechanics.createRandomCards(this.level, this.gameService.difficulty);
   }
 
   private startCountdown() {

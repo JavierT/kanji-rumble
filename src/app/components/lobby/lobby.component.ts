@@ -13,7 +13,7 @@ import { AuthService } from 'app/services/auth.service';
 export class LobbyComponent implements OnInit {
   //difficultyLevels = [];
   subs: Subscription;
-  difficultyLevels$: Observable<String[]>
+  difficultyLevels$: Observable<GameLevel[]>
 
   constructor(
     private gameService: GameService, 

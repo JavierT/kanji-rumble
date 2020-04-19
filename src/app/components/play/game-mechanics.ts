@@ -1,5 +1,6 @@
 import { Icarta } from 'app/models/carta';
 import { Subject } from 'rxjs';
+import { GameLevel } from 'app/models/gameInfo';
 
 export class GameMechanics {
     allTiles: Map<string, string[]>;
@@ -14,7 +15,7 @@ export class GameMechanics {
         this.allTiles = tiles;
     }
 
-    public createRandomCards(imgsPerCard: number) {
+    public createRandomCards(imgsPerCard: number, baseGameLevel: GameLevel) {
         /**
          * Problems detected> 
          *  - I can select the same cart twice
@@ -44,6 +45,7 @@ export class GameMechanics {
                     "folder": pickedKey,
                     "img": img,
                     "selected": false,
+                    "gameFolder": baseGameLevel.folderName,
                 });
             } else {
                 i--;
@@ -63,7 +65,8 @@ export class GameMechanics {
             "folder": new_folder,
             "img": cardADataTmp[randomIndex].img,
             "selected": false,
-            "solution": true
+            "solution": true,
+            "gameFolder": baseGameLevel.folderName,
         });
         // console.log('cardA: ', cardADataTmp)
         // console.log('cardB: ', cardBDataTmp)

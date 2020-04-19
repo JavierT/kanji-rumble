@@ -58,7 +58,7 @@ signOut() {
 guestMode() {
   this.authService.guestMode = true;
   console.log('guest mode')
-  this.router.navigate(['/lobby']);
+  this.router.navigate(['lobby']);
 }
 
 }

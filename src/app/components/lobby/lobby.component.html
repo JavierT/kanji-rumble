@@ -1,18 +1,24 @@
 <div fxLayout="column">
     <div fxFlex fxLayout="column" fxLayoutAlign="center center" class="title">
         <h4>Elige el nivel de dificultad</h4>
+        <span class="">Si es la primera vez que juegas puedes elegir el modo Kana.</span>
         <span class="txt-small">Los niveles están ordenados de menor a mayor dificultad.</span>
     </div>
-    <mat-divider></mat-divider>
-    <div *ngFor="let level of difficultyLevels$ | async" class="list-difficulties">
-        <div fxFlex fxLayout="row" fxLayoutAlign="center center">
-            <div fxFlex fxLayout="column" class="level">
-                <button mat-raised-button (click)="play(level)" [disabled]="isThisLevelDisabled(level)">
-                    <mat-icon class="icon">translate</mat-icon>
-                    {{level.levelName}}
-                </button>
-                <span class="txt-small">Multiplicador de puntuación de {{level.multiplier}} puntos.</span>
+    <mat-divider></mat-divider>        
+        <div *ngFor="let level of difficultyLevels$ | async" class="list-difficulties">
+            <div fxFlex fxLayout="row" fxLayoutAlign="center center">
+                <div fxFlex fxLayout="column" class="level">
+                    
+                    <button mat-raised-button (click)="play(level)" [disabled]="isThisLevelDisabled(level)">
+                        <mat-icon class="icon">translate</mat-icon>
+                        {{level.levelName}}
+                    </button>
+                    <span class="txt-small">Multiplicador de puntuación de {{level.multiplier}} puntos.</span>
+                </div>
             </div>
         </div>
+        <mat-divider></mat-divider>
     </div>
+    
+    
 </div>
