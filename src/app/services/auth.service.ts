@@ -93,24 +93,33 @@ export class AuthService {
   }
 
   loginWithGoogleAuth() {
-    return this.afAuth.auth.signInWithPopup(new auth.GoogleAuthProvider())
+    return this.afAuth.auth.signInWithRedirect(new auth.GoogleAuthProvider)
       .then((result) => {
-        console.log("Successful login with Google")
-        this.saveInStorage(result.user).pipe(take(1)).subscribe(
-          (playerData) => {
-            console.log("User stored successfully")
-            this.dataService.getRecordByUserId(playerData.uid);
-            this.ngZone.run(() => {
-              this.router.navigate(['/account']);
-            })
-          }
-        );
+        console.log("redirect ok ")
+        this.afAuth.auth.getRedirectResult()
+        .then(function(result) {
+          console.log("getRedirectResult  ", result)
+          console.log("Successful login with Google")
+          this.saveInStorage(result.user).pipe(take(1)).subscribe(
+            (playerData) => {
+              console.log("User stored successfully")
+              this.dataService.getRecordByUserId(playerData.uid);
+              this.ngZone.run(() => {
+                this.router.navigate(['/account']);
+              })
+            });
+        }).catch((error) => {
+          console.log(error)
+          const message = MyError.translateAuthError(error.code);
+          throw new MyError(message);
+        }
+        ); // end redirect results
         
-      }).catch((error) => {
-        console.log(error)
-        const message = MyError.translateAuthError(error.code);
-        throw new MyError(message);
-      }
+    }).catch((error) => {
+      console.log(error)
+      const message = MyError.translateAuthError(error.code);
+      throw new MyError(message);
+    }
     );
   }
 

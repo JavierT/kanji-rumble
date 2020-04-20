@@ -11,24 +11,29 @@ import {MatTableDataSource} from '@angular/material/table';
   styleUrls: ['./cheat-sheet.component.scss']
 })
 export class CheatSheetComponent implements OnInit, AfterViewInit {
-  levelComplete: GameLevel;
-  cols = ['calligraphy', 'print', 'picture', 'readings', 'translation'];
-  
-  length: number;
-  pageSize: number=5;
-  pageSizeOptions = [5, 10, 50];
-  dataSource = new MatTableDataSource<string>();
+  colsKana = ['hiragana', 'katakana', 'readings'];
+  colsKanji = ['calligraphy', 'print', 'picture', 'readings', 'translation'];
+  lengthKana: number;
 
-  @ViewChild(MatPaginator, {static: true}) set matPaginator(paginator: MatPaginator) {
-    this.dataSource.paginator = paginator;
-  }
-  //@ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+  lengthKanji: number;
+  pageSizeKana: number=5;
+  pageSizeKanji: number=5;
+  pageSizeOptions = [5, 10, 20];
+  dataSourceKana = new MatTableDataSource<string>();
+  dataSourceKanji = new MatTableDataSource<string>();
+
+  @ViewChild("MatPaginatorKana", {static: true}) paginatorKana;
+  @ViewChild("MatPaginatorKanji", {static: true}) paginatorKanji;
+  // @ViewChild(MatPaginatorKana, {static: true}) set matPaginator(paginator: MatPaginator) {
+  //   this.dataSourceKana.paginator = paginator;
+  // }
+  // @ViewChild(MatPaginatorKanji, {static: true}) set matPaginator(paginator: MatPaginator) {
+  //   this.dataSourceKana.paginator = paginator;
+  // }
 
   constructor(private dataService: DataService) { }
 
   ngOnInit() {
-    this.levelComplete = null;
-    
     this.dataService.getGameMainInfos().subscribe(
       (res: GameInfo) => {
         this.parseMainInfo(res);
@@ -37,24 +42,26 @@ export class CheatSheetComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-  //this.dataSource.paginator = this.paginator;
+    this.dataSourceKana.paginator = this.paginatorKana;
+    this.dataSourceKanji.paginator = this.paginatorKanji;
   }
 
   public parseMainInfo(gameInfo: GameInfo) {
     console.log(gameInfo);
     for (const level of gameInfo.levels) {
-      if (level.levelId === 2) {// N5 complete
-        this.levelComplete = level;
-        this.dataSource.data  = level.mapImagesByFolder.get('calligraphy');
-        this.length= level.mapImagesByFolder.get('calligraphy').length;
-        break;
+      if (level.levelId === 0) {// Kana complete
+        this.dataSourceKana.data  = level.mapImagesByFolder.get('hiragana');
+        this.lengthKana = level.mapImagesByFolder.get('hiragana').length;
+      } else if (level.levelId === 3) {// N5 complete
+        this.dataSourceKanji.data  = level.mapImagesByFolder.get('calligraphy');
+        this.lengthKanji = level.mapImagesByFolder.get('calligraphy').length;
       }
     }
 
   }
 
-  public getImg(folder: string, element: string) {
-    return `./assets/data/tiles/${folder}/${element}.jpg`;
+  public getImg(gameFolder: string, folder: string, element: string) {
+    return `./assets/data/${gameFolder}/${folder}/${element}.jpg`;
   }
 
 }

@@ -1,66 +1,117 @@
-<div class="padding-center">
-    <h2 class="ml-1">Hoja de referencia</h2>
-    <!-- <div *ngIf="dataSource"> https://github.com/angular/components/issues/10205 -->
-        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSortDisableClear>
+
+<mat-tab-group>
+    <mat-tab label="Kana">
+        <div class="padding-center">
+            <h2 class="ml-1">Hoja de referencia Kana</h2>
+            <table mat-table [dataSource]="dataSourceKana" class="mat-elevation-z8" matSortDisableClear>
+
+                <ng-container matColumnDef="hiragana">
+                    <th mat-header-cell *matHeaderCellDef> Hiragana </th>
+                    <td mat-cell *matCellDef="let element">
+                        <span class="cheatsheet-img">
+                            <img [src]="getImg('kana','hiragana',element)" class="medal" alt="">
+                        </span>
+
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="katakana">
+                    <th mat-header-cell *matHeaderCellDef> Katakana </th>
+                    <td mat-cell *matCellDef="let element">
+                        <span class="cheatsheet-img">
+                            <img [src]="getImg('kana','katakana',element)" class="medal" alt="">
+                        </span>
+
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="readings">
+                    <th mat-header-cell *matHeaderCellDef> Readings </th>
+                    <td mat-cell *matCellDef="let element">
+                        <span class="cheatsheet-img">
+                            <img [src]="getImg('kana','readings',element)" class="medal" alt="">
+                        </span>
+
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="colsKana; sticky: true"></tr>
+                <tr mat-row *matRowDef="let row; columns: colsKana;"></tr>
+            </table>
+            <mat-paginator #MatPaginatorKana [length]="lengthKana"
+            [pageSize]="pageSizeKana"
+            [pageSizeOptions]="pageSizeOptions"
+            showFirstLastButtons></mat-paginator>
+        </div>
+    </mat-tab>
+
+    <mat-tab label="Kanji">
+      
+        <div class="padding-center">
+            <h2 class="ml-1">Hoja de referencia Kanji</h2>
+        <!-- <div *ngIf="dataSource"> https://github.com/angular/components/issues/10205 -->
+            <table mat-table [dataSource]="dataSourceKanji" class="mat-elevation-z8" matSortDisableClear>
 
 
-            <ng-container matColumnDef="calligraphy">
-                <th mat-header-cell *matHeaderCellDef> Caligrafía </th>
-                <td mat-cell *matCellDef="let element">
-                    <span class="cheatsheet-img">
-                        <img [src]="getImg('calligraphy',element)" class="medal" alt="">
-                    </span>
+                <ng-container matColumnDef="calligraphy">
+                    <th mat-header-cell *matHeaderCellDef> Caligrafía </th>
+                    <td mat-cell *matCellDef="let element">
+                        <span class="cheatsheet-img">
+                            <img [src]="getImg('kanji','calligraphy',element)" class="medal" alt="">
+                        </span>
 
-                </td>
-            </ng-container>
+                    </td>
+                </ng-container>
 
-            <ng-container matColumnDef="print">
-                <th mat-header-cell *matHeaderCellDef> Imprenta </th>
-                <td mat-cell *matCellDef="let element">
-                    <span class="cheatsheet-img">
-                        <img [src]="getImg('print',element)" class="medal" alt="">
-                    </span>
+                <ng-container matColumnDef="print">
+                    <th mat-header-cell *matHeaderCellDef> Imprenta </th>
+                    <td mat-cell *matCellDef="let element">
+                        <span class="cheatsheet-img">
+                            <img [src]="getImg('kanji','print',element)" class="medal" alt="">
+                        </span>
 
-                </td>
-            </ng-container>
+                    </td>
+                </ng-container>
 
-            <ng-container matColumnDef="picture">
-                <th mat-header-cell *matHeaderCellDef> Imagen </th>
-                <td mat-cell *matCellDef="let element">
-                    <span class="cheatsheet-img">
-                        <img [src]="getImg('picture',element)" class="medal" alt="">
-                    </span>
+                <ng-container matColumnDef="picture">
+                    <th mat-header-cell *matHeaderCellDef> Imagen </th>
+                    <td mat-cell *matCellDef="let element">
+                        <span class="cheatsheet-img">
+                            <img [src]="getImg('kanji','picture',element)" class="medal" alt="">
+                        </span>
 
-                </td>
-            </ng-container>
+                    </td>
+                </ng-container>
 
-            <ng-container matColumnDef="readings">
-                <th mat-header-cell *matHeaderCellDef> Lecturas </th>
-                <td mat-cell *matCellDef="let element">
-                    <span class="cheatsheet-img">
-                        <img [src]="getImg('readings',element)" class="medal" alt="">
-                    </span>
+                <ng-container matColumnDef="readings">
+                    <th mat-header-cell *matHeaderCellDef> Lecturas </th>
+                    <td mat-cell *matCellDef="let element">
+                        <span class="cheatsheet-img">
+                            <img [src]="getImg('kanji','readings',element)" class="medal" alt="">
+                        </span>
 
-                </td>
-            </ng-container>
+                    </td>
+                </ng-container>
 
-            <ng-container matColumnDef="translation">
-                <th mat-header-cell *matHeaderCellDef> Significado </th>
-                <td mat-cell *matCellDef="let element">
-                    <span class="cheatsheet-img">
-                        <img [src]="getImg('translation',element)" class="medal" alt="">
-                    </span>
+                <ng-container matColumnDef="translation">
+                    <th mat-header-cell *matHeaderCellDef> Significado </th>
+                    <td mat-cell *matCellDef="let element">
+                        <span class="cheatsheet-img">
+                            <img [src]="getImg('kanji','translation',element)" class="medal" alt="">
+                        </span>
 
-                </td>
-            </ng-container>
+                    </td>
+                </ng-container>
 
 
-            <tr mat-header-row *matHeaderRowDef="cols; sticky: true"></tr>
-            <tr mat-row *matRowDef="let row; columns: cols;"></tr>
-        </table>
-        <mat-paginator [length]="length"
-        [pageSize]="pageSize"
-        [pageSizeOptions]="pageSizeOptions"
-        showFirstLastButtons></mat-paginator>
-    <!-- </div> -->
-</div>
+                <tr mat-header-row *matHeaderRowDef="colsKanji; sticky: true"></tr>
+                <tr mat-row *matRowDef="let row; columns: colsKanji;"></tr>
+            </table>
+            <mat-paginator #MatPaginatorKanji [length]="lengthKanji"
+            [pageSize]="pageSizeKanji"
+            [pageSizeOptions]="pageSizeOptions"
+            showFirstLastButtons></mat-paginator>
+        <!-- </div> -->
+        </div>
+    </mat-tab>
+  </mat-tab-group>

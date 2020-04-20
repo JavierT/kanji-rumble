@@ -28,12 +28,12 @@ table {
     justify-content: center;
 
     img {
-        max-width: 80px;
+        max-height: 80px;
         height: 100%;
         margin: 10px;
 
         @media (max-width: $breakpoint-mobile){
-            max-width: 40px;
+            max-height: 40px;
             margin: 5px;
         }
     }
