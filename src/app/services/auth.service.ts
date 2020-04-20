@@ -17,7 +17,7 @@ import { take } from 'rxjs/operators';
 export class AuthService {
   playerData: Player; // Save logged in user data
   guestMode = false;
-
+  
   constructor(
     public afs: AngularFirestore,   // Inject Firestore service
     public afAuth: AngularFireAuth, // Inject Firebase auth service
@@ -37,10 +37,13 @@ export class AuthService {
   }
 
   saveInStorage(user) {
+    const savedSubject = new Subject<Player>();
     this.dataService.getPlayer(user.uid).subscribe((player) => {
       this.playerData = player.data() as Player;
       localStorage.setItem('user', JSON.stringify(this.playerData));
+      savedSubject.next(this.playerData);
     });
+    return savedSubject;
   }
 
   getUserData(): ReplaySubject<Player> {
@@ -70,10 +73,39 @@ export class AuthService {
   signIn(email, password) {
     return this.afAuth.auth.signInWithEmailAndPassword(email, password)
       .then((result) => {
-        this.saveInStorage(result.user);
-        this.ngZone.run(() => {
-          this.router.navigate(['/account']);
-        })
+        console.log("Successful login")
+        this.saveInStorage(result.user).pipe(take(1)).subscribe(
+          (playerData) => {
+            console.log("User stored successfully")
+            this.dataService.getRecordByUserId(playerData.uid);
+            this.ngZone.run(() => {
+              this.router.navigate(['/account']);
+            })
+          }
+        );
+        
+      }).catch((error) => {
+        console.log(error)
+        const message = MyError.translateAuthError(error.code);
+        throw new MyError(message);
+      }
+    );
+  }
+
+  loginWithGoogleAuth() {
+    return this.afAuth.auth.signInWithPopup(new auth.GoogleAuthProvider())
+      .then((result) => {
+        console.log("Successful login with Google")
+        this.saveInStorage(result.user).pipe(take(1)).subscribe(
+          (playerData) => {
+            console.log("User stored successfully")
+            this.dataService.getRecordByUserId(playerData.uid);
+            this.ngZone.run(() => {
+              this.router.navigate(['/account']);
+            })
+          }
+        );
+        
       }).catch((error) => {
         console.log(error)
         const message = MyError.translateAuthError(error.code);
@@ -86,17 +118,37 @@ export class AuthService {
   registerWithEmail(email, password, username) {
     return this.afAuth.auth.createUserWithEmailAndPassword(email, password)
       .then((result) => {
-        this.setUserData(result.user, username);
-        this.sendVerificationMail();
-        this.ngZone.run(() => {
-          this.router.navigate(['/verify-email']);
-        })
-        return result.user.uid;
+        this.setUserData(result.user, username).pipe(take(1)).subscribe((player) => {
+          this.sendVerificationMail();
+          this.ngZone.run(() => {
+            this.router.navigate(['/verify-email']);
+          })
+          return player.uid;
+        });
       }).catch((error) => {
         console.log(error)
         throw new MyError("Registro fallido");
       }
     );
+  }
+
+  
+  // Auth logic to run auth providers
+  registerWithGoogleAuth() {
+    return this.afAuth.auth.signInWithPopup(new auth.GoogleAuthProvider())
+    .then((result) => {
+      this.setUserData(result.user).pipe(take(1)).subscribe((player) => {
+        console.log("setUserData next with ", player)
+        this.ngZone.run(() => {
+          console.log("good to go, router to account")
+          this.router.navigate(['/account']);
+        });
+        return player.uid;
+      });
+    }).catch((error) => {
+      console.log(error)
+      throw new MyError("Registro fallido");
+    })
   }
 
 //   // Send email verfificaiton when new user sign up
@@ -111,7 +163,6 @@ export class AuthService {
     });
   }
 
-
   // Returns true when user is looged in and email is verified
   get isLoggedIn(): boolean {
     const user = JSON.parse(localStorage.getItem('user'));
@@ -124,33 +175,17 @@ export class AuthService {
     return (user !== null) ? user.uid : null;
   }
 
-  // Sign in with Google
-  googleAuth() {
-    return this.authLogin(new auth.GoogleAuthProvider())
-  }
-
-  // Auth logic to run auth providers
-  authLogin(provider) {
-    return this.afAuth.auth.signInWithPopup(provider).then((result) => {
-      const subs = this.setUserData(result.user).pipe(take(1)).subscribe(() => {
-        this.ngZone.run(() => {
-          this.router.navigate(['account']);
-        });
-        
-      });
-    }).catch((error) => {
-      window.alert(error)
-    })
-  }
 
   /* Setting up user data when sign in with username/password, 
   sign up with username/password and sign in with social auth  
   provider in Firestore database using AngularFirestore + AngularFirestoreDocument service */
-  setUserData(user, displayName=null): BehaviorSubject<Player> {
-    const ready = new BehaviorSubject<Player>(null);
+  setUserData(user, displayName=null): Subject<Player> {
+    const ready = new Subject<Player>();
     const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
     userRef.get().pipe(take(1)).subscribe((doc) => {
       if (doc.exists) {
+        // User already in the database.
+        console.log('User already registered')
       } else {
           const playerData: Player = {
             uid: user.uid,
@@ -167,8 +202,11 @@ export class AuthService {
           const record = this.dataService.createEmptyRecord(user.uid);
           this.dataService.createRecord(record);
       }
-      this.saveInStorage(user);
-      ready.next(user);
+      this.saveInStorage(user)
+        .subscribe((playerData) => {
+          console.log("User stored successfully")
+          ready.next(playerData);
+        });
     });
     return ready;
   }

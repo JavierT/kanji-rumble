@@ -23,7 +23,6 @@ export class LoginComponent implements OnInit {
 
   onSubmit(form: NgForm) {
     this.authService.signIn(form.value.email, form.value.password)
-      .then((res) => this.doActionsAfterLogin())
       .catch((error) => {
         console.log("login component, error ", error)
         form.value.password = '';
@@ -34,21 +33,13 @@ export class LoginComponent implements OnInit {
   }
 
   tryGoogleAuth() {
-    this.authService.googleAuth()
-      .then((res) => this.doActionsAfterLogin())
+    this.authService.loginWithGoogleAuth()
       .catch((error) => {
         console.log(error)
         this._snackBar.open('Autentificación con Google fallida', 'Ok', {
           duration: 3000
         });
     });
-  }
-
-  doActionsAfterLogin() {
-    console.log("Successful login")
-    this.dataService.getRecordByUserId(this.authService.userUid);
-    this.cdr.detectChanges();
-    this.router.navigate(['account']);
   }
 
 signOut() {

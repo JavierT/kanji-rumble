@@ -65,10 +65,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.mainIfnoSubs.unsubscribe();
   }
 
-  getImgSrc(carta: Icarta) {
-    return `./assets/data/${carta.folder}/${carta.img}.jpg`;
-  }
-
   selectTile(where: Icarta[], index: number) {
     for (const tile of where) {
       tile.selected = false;

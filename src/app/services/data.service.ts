@@ -99,6 +99,7 @@ export class DataService {
                 })
             if(arrayRec.length > 0) {
                 this.lastRecord.next(arrayRec[0]);
+                //console.log("last record of user recovered ", arrayRec[0])
             }
         });
     }

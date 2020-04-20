@@ -68,6 +68,9 @@ input:-webkit-autofill:active  {
 .mr-1 {
   margin-right: 1em;
 }
+.mb-1 {
+  margin-bottom: 1em;
+}
 
 .flex-col {
   display: flex;
@@ -76,4 +79,9 @@ input:-webkit-autofill:active  {
 
 .full-width {
   width: 100%;
+}
+
+.fake-link {
+  text-decoration: underline;
+  color: lightblue;
 }

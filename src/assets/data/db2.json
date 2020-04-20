@@ -5,7 +5,7 @@
 		  "levelName":"Basic Complete",
 		  "levelId":"0",
 		  "multiplier":"5",
-		  "folderName": "Basic",
+		  "folderName": "kanji",
 		  "folders":[
 			{
 			  "name":"calligraphy",
@@ -71,7 +71,7 @@
 		},
 		{
 		  "levelName":"Basic Translations",
-		  "folderName": "Basic",
+		  "folderName": "kanji",
 		  "multiplier":"3",
 		  "levelId":"1",
 		  "folders":[
@@ -106,7 +106,7 @@
 		  "levelName":"N5 Complete",
 		  "levelId":"2",
 		  "multiplier":"7",
-		  "folderName": "N5",
+		  "folderName": "kanji",
 		  "folders":[
 			{
 			  "name":"calligraphy",
@@ -209,7 +209,7 @@
 		  "levelName":"N5 Translations",
 		  "levelId":"3",
 		  "multiplier":"5",
-		  "folderName": "N5",
+		  "folderName": "kanji",
 		  "folders":[
 			{
 			  "name":"calligraphy",
@@ -253,7 +253,7 @@
 		},
 	   {
 		  "levelName":"Kana",
-		  "folderName": "Kana",
+		  "folderName": "kana",
 		  "multiplier":"1",
 		  "levelId":"4",
 		  "folders":[

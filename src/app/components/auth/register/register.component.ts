@@ -35,7 +35,7 @@ export class RegisterComponent implements OnInit {
   }
 
   tryGoogleAuth() {
-    this.authService.googleAuth()
+    this.authService.registerWithGoogleAuth()
       .then((res) => {})
       .catch((error) => {
         console.log(error)

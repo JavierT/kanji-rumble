@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Subscription, Observable } from 'rxjs';
 import { GameLevel } from 'app/models/gameInfo';
 import { AuthService } from 'app/services/auth.service';
+import { MatBottomSheet } from '@angular/material';
 
 @Component({
   selector: 'app-lobby',
@@ -14,11 +15,13 @@ export class LobbyComponent implements OnInit {
   //difficultyLevels = [];
   subs: Subscription;
   difficultyLevels$: Observable<GameLevel[]>
+  showKanaInfo = false;
 
   constructor(
     private gameService: GameService, 
     private router: Router,
-    private authService: AuthService) { }
+    private authService: AuthService,
+    private _bottomSheet: MatBottomSheet) { }
 
   ngOnInit() {
     this.difficultyLevels$ = this.gameService.getLevels();

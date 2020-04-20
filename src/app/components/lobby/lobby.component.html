@@ -1,24 +1,24 @@
 <div fxLayout="column">
     <div fxFlex fxLayout="column" fxLayoutAlign="center center" class="title">
         <h4>Elige el nivel de dificultad</h4>
-        <span class="">Si es la primera vez que juegas puedes elegir el modo Kana.</span>
+        <p class="">Si es de las primeras veces que juegas puedes elegir el modo <span class="fake-link" (click)="showKanaInfo=!showKanaInfo">Kana.</span></p>
+        <small *ngIf="showKanaInfo" class="mb-1">Kana es un término que describe a las sílabas japonesas... Más información aquí <a target="_blank" href="https://es.wikipedia.org/wiki/Kana">Kana Wikipedia</a>.</small>
         <span class="txt-small">Los niveles están ordenados de menor a mayor dificultad.</span>
     </div>
     <mat-divider></mat-divider>        
-        <div *ngFor="let level of difficultyLevels$ | async" class="list-difficulties">
-            <div fxFlex fxLayout="row" fxLayoutAlign="center center">
-                <div fxFlex fxLayout="column" class="level">
-                    
-                    <button mat-raised-button (click)="play(level)" [disabled]="isThisLevelDisabled(level)">
-                        <mat-icon class="icon">translate</mat-icon>
-                        {{level.levelName}}
-                    </button>
-                    <span class="txt-small">Multiplicador de puntuación de {{level.multiplier}} puntos.</span>
-                </div>
+    <div *ngFor="let level of difficultyLevels$ | async" class="list-difficulties">
+        <div fxFlex fxLayout="row" fxLayoutAlign="center center">
+            <div fxFlex fxLayout="column" class="level">
+                
+                <button mat-raised-button (click)="play(level)" [disabled]="isThisLevelDisabled(level)">
+                    <mat-icon class="icon">translate</mat-icon>
+                    {{level.levelName}}
+                </button>
+                <span class="txt-small">Multiplicador de puntuación de {{level.multiplier}} puntos.</span>
             </div>
         </div>
-        <mat-divider></mat-divider>
     </div>
+
     
     
 </div>

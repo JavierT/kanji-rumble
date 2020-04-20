@@ -19,7 +19,6 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { LoginComponent } from './components/auth/login/login.component';
 import { PlayComponent } from './components/play/play.component';
 import { CardComponent } from './lib-components/card/card.component';
-import { AuthService } from './services/auth.service';
 import { RegisterComponent } from './components/auth/register/register.component';
 import { ResetPasswordComponent } from './components/auth/reset-password/reset-password.component';
 import { PlayerAccountComponent } from './components/player-account/player-account.component';
