@@ -36,7 +36,6 @@ import { LoaderInterceptor } from './services/loader.interceptor';
 
 const firebaseConfig = {
   apiKey: "AIzaSyA4AGlXbkDg9KUwTDAX7IpLHMVjiLzViqE",
-  authDomain: "kanjirumble-9d2fa.firebaseapp.com",
   databaseURL: "https://kanjirumble-9d2fa.firebaseio.com",
   projectId: "kanjirumble-9d2fa",
   storageBucket: "kanjirumble-9d2fa.appspot.com",
