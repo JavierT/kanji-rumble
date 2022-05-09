@@ -1,6 +1,19 @@
-# Kaji rumble
+This project is an web game to learn Japanese using images. It uses the same concepts as memory games where users must find the pairs of images that mean the same.
+Project created in collaboration with Jorge Marin under Apache 2.0 license.
+
+
+The game offers different levels of difficulty and keeps the score of each registered user.
+
+Game can be played here: 
+http://kanji-rumble.javiertresaco.com/#/home
+
+# Kanji rumble
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.17.
+
+# Database
+
+Firebase.
 
 ## Development server
 
