@@ -1,9 +1,0 @@
-@import '~@angular/material/theming';
-
-$breakpoint-mobile: 600px;
-
-$primaryPalette: mat-palette($mat-purple);
-$accentPalette:  mat-palette($mat-purple, A200, A100, A400);
-
-// the default warn palette is red, so use that if the theme doesn't define one
-$warnPalette:    mat-palette($mat-red);
