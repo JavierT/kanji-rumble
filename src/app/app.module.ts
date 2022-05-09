@@ -33,6 +33,7 @@ import { CheatSheetComponent } from './components/cheat-sheet/cheat-sheet.compon
 import { DataLoaderComponent } from './lib-components/data-loader/data-loader.component';
 import { LoaderService } from './services/loader.service';
 import { LoaderInterceptor } from './services/loader.interceptor';
+import { APP_BASE_HREF } from '@angular/common';
 
 const firebaseConfig = {
   apiKey: "AIzaSyA4AGlXbkDg9KUwTDAX7IpLHMVjiLzViqE",
@@ -83,6 +84,7 @@ const firebaseConfig = {
   ],
   providers: [
     LoaderService,
+    {provide: APP_BASE_HREF, useValue: '/'},
     { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true }],
   bootstrap: [AppComponent]
 })
