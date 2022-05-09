@@ -1,44 +1,64 @@
 {
 	"card1": [{
-			"folder": "pictures",
-			"img": "28"
+			"folder": "picture",
+			"img": "28",
+			"levelFolder": "Basic",
+			"gameFolder": "kanji"
 		},
 		{
 			"folder": "print",
-			"img": "24"
-		},
-		{
-			"folder": "translation",
-			"img": "55"
+			"img": "24",
+			"levelFolder": "Basic",
+			"gameFolder": "kanji"
 		},
 		{
 			"folder": "calligraphy",
-			"img": "35"
+			"img": "31",
+			"levelFolder": "Basic",
+			"gameFolder": "kanji"
+		},
+		{
+			"folder": "calligraphy",
+			"img": "35",
+			"levelFolder": "Basic",
+			"gameFolder": "kanji"
 		},
 		{
 			"folder": "translation",
-			"img": "57"
+			"img": "57",
+			"levelFolder": "Basic",
+			"gameFolder": "kanji"
 		}
 	],
 	"card2": [{
 			"folder": "translation",
-			"img": "3"
+			"img": "3",
+			"levelFolder": "Basic",
+			"gameFolder": "kanji"
 		},
 		{
-			"folder": "pictures",
-			"img": "55"
+			"folder": "picture",
+			"img": "31",
+			"levelFolder": "Basic",
+			"gameFolder": "kanji"
 		},
 		{
 			"folder": "print",
-			"img": "54"
+			"img": "54",
+			"levelFolder": "Basic",
+			"gameFolder": "kanji"
 		},
 		{
 			"folder": "calligraphy",
-			"img": "14"
+			"img": "14",
+			"levelFolder": "Basic",
+			"gameFolder": "kanji"
 		},
 		{
-			"folder": "pictures",
-			"img": "48"
+			"folder": "picture",
+			"img": "48",
+			"levelFolder": "Basic",
+			"gameFolder": "kanji"
 		}
 	],
 	"solution1": {
@@ -46,7 +66,7 @@
 		"img": "55"
 	},
 	"solution2": {
-		"folder": "pictures",
+		"folder": "picture",
 		"img": "55"
 	}
 }
