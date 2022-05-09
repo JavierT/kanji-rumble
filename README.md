@@ -4,8 +4,7 @@ Project created in collaboration with Jorge Marin under Apache 2.0 license.
 
 The game offers different levels of difficulty and keeps the score of each registered user.
 
-Game can be played here: 
-http://kanji-rumble.javiertresaco.com/#/home
+Currently the game is offline as my website is now hosting on github. As soon as the demo is online, I will publish the link
 
 # Kanji rumble
 
